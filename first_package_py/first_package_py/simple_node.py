@@ -15,10 +15,13 @@ def main(args=None):
     Args:
         args (dict, optional): Key-value pair arguments. Defaults to None.
     '''
+    # Initialize connection to ROS
     rclpy.init(args=args)
+    # Instantiate node
     node = Node('minimal_python_node')
     node.get_logger().info('Help me Obi-Wan Kenobi, you are my only hope')
-    rclpy.spin(node)
+    # Keep node alive
+    # Shutdown context
     rclpy.shutdown()
 
 ####################
