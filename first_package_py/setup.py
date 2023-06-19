@@ -22,6 +22,9 @@ setup(
         'console_scripts': [
             'simple_node_exe = first_package_py.simple_node:main',
             'minimal_publisher_exe = first_package_py.minimal_publisher:main',
+            'exercise1_exe = first_package_py.exercise1:main',
+            'exercise2_exe = first_package_py.exercise2:main',
+            'exercise3_exe = first_package_py.exercise3:main',
             'advanced_publisher_exe = first_package_py.advanced_publisher:main',
             'subscriber_exe = first_package_py.subscriber:main'
         ],
