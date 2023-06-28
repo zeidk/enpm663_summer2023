@@ -39,7 +39,7 @@ ament_python_install_package(${PROJECT_NAME})
 # Install Python executables
 install(PROGRAMS
   nodes/message_demo_exe.py
-  nodes/service_client_demo_exe.py
+  nodes/client_demo_exe.py
   DESTINATION lib/${PROJECT_NAME}
 )
 

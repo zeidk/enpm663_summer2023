@@ -70,6 +70,9 @@ class AddTwoIntsClient(Node):
             a (int): First integer
             b (int): Second integer
         '''
+        while not self._client.wait_for_service(timeout_sec=1.0):
+            self.get_logger().info('Service not available, waiting...')
+            
         self._request.a = a
         self._request.b = b
         response = self._client.call(self._request)

@@ -7,7 +7,7 @@
 
 using namespace std::chrono_literals;
 
-void AddTwoIntsClient::call_client_cb()
+void AddTwoIntsClient::timer_cb()
 {
 
     // Providing a seed value
@@ -19,7 +19,6 @@ void AddTwoIntsClient::call_client_cb()
 
     call_client(a, b);
 }
-
 
 
 void AddTwoIntsClient::response_callback(rclcpp::Client<enpm663_msgs::srv::AddTwoInts>::SharedFuture future)
