@@ -14,7 +14,7 @@ class Weather(Node):
 
     def __init__(self, node_name):
         super().__init__(node_name)
-        self._forecast_pub = self.create_publisher(WeatherStation, 'weather_forecast', 100)
+        self._forecast_pub = self.create_publisher(WeatherStation, 'weather', 100)
         self._pub_timer = self.create_timer(2, self._pub_timer_cb)
         self._current_day = datetime.now().weekday()
 

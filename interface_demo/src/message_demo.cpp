@@ -16,6 +16,7 @@ void Weather::pub_timer_cb()
     time_msg.sec = sec;
     time_msg.nanosec = nanosec;
     weather_msg_.time = time_msg;
+    // RCLCPP_INFO_STREAM(this->get_logger(), "Publishing: " << weather_msg_.weather << " on day " << weather_msg_.day);
     weather_pub_->publish(weather_msg_);
 }
 

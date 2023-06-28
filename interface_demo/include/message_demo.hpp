@@ -35,7 +35,7 @@ public:
                                          std::bind(&Weather::pub_timer_cb, this));
 
         // publisher
-        weather_pub_ = this->create_publisher<enpm663_msgs::msg::WeatherStation>("weather_forecast", 10);
+        weather_pub_ = this->create_publisher<enpm663_msgs::msg::WeatherStation>("weather", 10);
     }
 
 private:
