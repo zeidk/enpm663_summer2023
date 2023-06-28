@@ -1,0 +1,20 @@
+camera1:  # Name of your Node
+  ros__parameters:
+    frequency: 50.0
+    bandwidth: 2.0
+    name: 'blindspot_left'
+camera2:  # Name of your Node
+  ros__parameters:
+    frequency: 80.0
+    bandwidth: 4.0
+    name: 'front_center'
+camera3:  # Name of your Node
+  ros__parameters:
+    frequency: 50.0
+    bandwidth: 2.0
+    name: 'blindspot_right'
+camera4:  # Name of your Node
+  ros__parameters:
+    frequency: 24.0
+    bandwidth: 1.0
+    name: 'rear_center'
