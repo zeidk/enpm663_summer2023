@@ -10,6 +10,8 @@ def main(args=None):
     # create a multi-threaded executor
     executor = MultiThreadedExecutor()
     executor.add_node(node)
+    # Shreejay: You cam add more nodes to the executor here
+    # e.g., executor.add_node(node2)
 
     try:
         executor.spin()
