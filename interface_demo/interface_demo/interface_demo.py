@@ -107,7 +107,7 @@ class ServiceClientCallFromTimer(Node):
 
     def send_async_request(self, a, b):
         '''
-        Send a request asynchrnously to the add_two_ints service
+        Send a request asynchronously to the add_two_ints service
 
         Args:
             a (int): First integer
@@ -137,7 +137,7 @@ class ServiceClientCallFromTimer(Node):
 
     def send_sync_request(self, a, b):
         '''
-        Send a request synchrnously to the add_two_ints service
+        Send a request synchronously to the add_two_ints service
 
         Args:
             a (int): First integer
@@ -206,7 +206,7 @@ class ServiceClientCallFromSubscriber(Node):
 
     def send_async_request(self, a, b):
         '''
-        Send a request asynchrnously to the add_two_ints service
+        Send a request asynchronously to the add_two_ints service
 
         Args:
             a (int): First integer
@@ -236,7 +236,7 @@ class ServiceClientCallFromSubscriber(Node):
 
     def send_sync_request(self, a, b):
         '''
-        Send a request synchrnously to the add_two_ints service
+        Send a request synchronously to the add_two_ints service
 
         Args:
             a (int): First integer
