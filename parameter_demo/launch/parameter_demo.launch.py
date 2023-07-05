@@ -24,9 +24,9 @@ def generate_launch_description():
     )
     parameter_file_demo = Node(
         package="parameter_demo",
-        executable="parameter_demo_exe.py",
+        executable="parameter_demo_exe",
         parameters=[node_params],
     )
 
-    ld.add_action(parameter_individual_demo)   
+    ld.add_action(parameter_file_demo)
     return ld                               

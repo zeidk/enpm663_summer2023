@@ -4,7 +4,7 @@ from rclpy.node import Node
 from builtin_interfaces.msg import Time
 from enpm663_msgs.msg import WeatherStation
 from enpm663_msgs.srv import AddTwoInts
-from rclpy.callback_groups import MutuallyExclusiveCallbackGroup
+from rclpy.callback_groups import MutuallyExclusiveCallbackGroup, ReentrantCallbackGroup
 
 
 class Weather(Node):
@@ -15,12 +15,12 @@ class Weather(Node):
     def __init__(self, node_name):
         super().__init__(node_name)
         self._forecast_pub = self.create_publisher(WeatherStation, 'weather', 100)
-        self._pub_timer = self.create_timer(2, self._pub_timer_cb)
+        self._pub_timer = self.create_timer(1, self._pub_timer_cb)
         self._current_day = datetime.now().weekday()
 
     def _pub_timer_cb(self):
         msg = WeatherStation()
-        msg.weather = WeatherStation.CLOUDY
+        msg.weather = WeatherStation.SNOWY
         msg.day = self._current_day
         time_msg = Time()
         time_msg.sec = self.get_clock().now().seconds_nanoseconds()[0]
@@ -39,41 +39,96 @@ class AddTwoIntsClient(Node):
 
     def __init__(self, node_name):
         super().__init__(node_name)
+        
+        self._counter = 0
+        
         # Create various callback groups to ensure that various events are called in a mutually exclusive manner
         client_cb_group = MutuallyExclusiveCallbackGroup()
-        timer_cb_group = MutuallyExclusiveCallbackGroup()
+        subscriber_cb_group = MutuallyExclusiveCallbackGroup()
 
-        self._client = self.create_client(AddTwoInts, 'add_two_ints', callback_group=client_cb_group)
+        self._subscriber = self.create_subscription(
+            WeatherStation, 'weather', self._weather_cb, 100, callback_group=subscriber_cb_group)
+
+        # Create a client to call the add_two_ints service
+        # This client will be synchronously called
+        # The callback group ensures that the callback function is called in a mutually exclusive manner
+        self._sync_client = self.create_client(AddTwoInts, 'add_two_ints', callback_group=client_cb_group)
+
+        self._async_client = self.create_client(AddTwoInts, 'add_two_ints')
 
         # Wait for the service to be available
-        while not self._client.wait_for_service(timeout_sec=1.0):
+        while not self._sync_client.wait_for_service(timeout_sec=1.0):
             self.get_logger().info('Service not available, waiting...')
 
         self._logger.info("client created")
         self._request = AddTwoInts.Request()
-        self._client_timer = self.create_timer(2, self._client_timer_cb, callback_group=timer_cb_group)
+        
+        
 
-    def _client_timer_cb(self):
+    def _weather_cb(self, msg: WeatherStation):
         '''
-        Callback function for the client timer
-        The body of this function is executed every 2 seconds
-        '''
-        a = random.randint(0, 9)
-        b = random.randint(0, 9)
-        self.send_request(a, b)
+        Callback function for the weather subscriber
 
-    def send_request(self, a, b):
+        Args:
+            msg (WeatherStation): Message received from the weather topic
         '''
-        Send a request to the add_two_ints service
+        self.get_logger().info(f'Received: {int(msg.time.sec)}')
+
+        # The following code will call the service only if the seconds in the time stamp is even
+        if int(msg.time.sec) % 2 == 0:
+            self.get_logger().info('Calling sync service')
+            self._request.a = random.randint(0, 9)
+            self._request.b = random.randint(0, 9)
+            # self.send_sync_request(self._request.a, self._request.b)
+            self.send_async_request(self._request.a, self._request.b)
+        
+        # To test ReentrantCallbackGroup, uncomment the following code
+        # while True:
+        #     ...
+
+    def send_async_request(self, a, b):
+        '''
+        Send a request asynchrnously to the add_two_ints service
 
         Args:
             a (int): First integer
             b (int): Second integer
         '''
-        while not self._client.wait_for_service(timeout_sec=1.0):
+
+        while not self._async_client.wait_for_service(timeout_sec=1.0):
             self.get_logger().info('Service not available, waiting...')
-            
+
         self._request.a = a
         self._request.b = b
-        response = self._client.call(self._request)
-        self.get_logger().info(f'Response: {response.sum}')
+
+        self.get_logger().info(f'Async Request: {a} + {b}')
+        future = self._async_client.call_async(self._request)
+
+        # Add a callback function to be called when the future is complete
+        future.add_done_callback(self.future_callback)
+
+    def future_callback(self, future):
+        '''
+        Callback function for the future object
+
+        Args:
+            future (Future): A future object
+        '''
+        self.get_logger().info(f'Async Result: {future.result().sum}')
+
+    def send_sync_request(self, a, b):
+        '''
+        Send a request synchrnously to the add_two_ints service
+
+        Args:
+            a (int): First integer
+            b (int): Second integer
+        '''
+        while not self._sync_client.wait_for_service(timeout_sec=1.0):
+            self.get_logger().info('Service not available, waiting...')
+
+        self.get_logger().info('Sync Request')
+        self._request.a = a
+        self._request.b = b
+        response = self._sync_client.call(self._request)
+        self.get_logger().info(f'Sync Result: {response.sum}')

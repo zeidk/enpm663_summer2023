@@ -14,13 +14,13 @@ find_package(std_msgs REQUIRED)
 include_directories(include)
 
 # Publisher
-add_executable(parameter_demo_exe src/parameter_demo.cpp)
-ament_target_dependencies(parameter_demo_exe rclcpp std_msgs)
+# add_executable(parameter_demo_exe src/parameter_demo.cpp)
+# ament_target_dependencies(parameter_demo_exe rclcpp std_msgs)
 
-install(TARGETS
-parameter_demo_exe
-DESTINATION lib/${PROJECT_NAME}
-)
+# install(TARGETS
+# parameter_demo_exe
+# DESTINATION lib/${PROJECT_NAME}
+# )
 
 install(DIRECTORY
   include

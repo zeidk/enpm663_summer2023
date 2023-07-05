@@ -3,7 +3,7 @@
 #include <rclcpp/rclcpp.hpp>
 #include <std_msgs/msg/string.hpp>
 #include "rcl_interfaces/msg/set_parameters_result.hpp"
-
+#include <string>
 // timer
 class ParameterDemoNode : public rclcpp::Node
 {
@@ -16,7 +16,7 @@ public:
         // publisher
         publisher_ = this->create_publisher<std_msgs::msg::String>("leia", 10);
         // parameter
-        this->declare_parameter("jedi", "Obi-Wan Kenobi");
+        this->declare_parameter("jedi", "Yoda");
         jedi_ = this->get_parameter("jedi").as_string();
         // timer callback
         timer_ = this->create_wall_timer(std::chrono::milliseconds((int)(2000.0)),

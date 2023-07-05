@@ -100,6 +100,6 @@ def generate_launch_description():
 
     ld.add_action(camera1_python)
     ld.add_action(camera2_python)
-    ld.add_action(camera3_python)
-    ld.add_action(camera4_python)
+    ld.add_action(camera3_cpp)
+    ld.add_action(camera4_cpp)
     return ld
