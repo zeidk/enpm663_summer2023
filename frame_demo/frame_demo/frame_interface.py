@@ -9,36 +9,42 @@ from tf2_ros import TransformException
 from tf2_ros.buffer import Buffer
 from tf2_ros.transform_listener import TransformListener
 
+
 class ListenerDemo(Node):
     '''
     Class to listen to the frames broadcast by the broadcaster.
-    '''  
+    '''
 
     def __init__(self, node_name):
         super().__init__(node_name)
-        
+
+        # Parameter to choose whether to broadcast only or both broadcast and listen
         self._demo_type = self.declare_parameter(
             'demo_type', 'broadcast').get_parameter_value().string_value
-    
+
+        # Parameter to choose the parent frame
         self._parent_frame = self.declare_parameter(
             'parent_frame', 'world').get_parameter_value().string_value
-        
+
+        # Parameter to choose the child frame
         self._child_frame = self.declare_parameter(
             'child_frame', 'first_dynamic_frame').get_parameter_value().string_value
-        
+
+        # Check if the demo_type is valid
         if self._demo_type not in ['broadcast', 'both']:
             raise ValueError('demo_type must be either broadcast or both')
-        
-        # Execute the listener only if the demo_type is both
+
+        # Do not execute the listener if the demo_type is broadcast
         if self._demo_type == 'broadcast':
             return
-        
+
+        # Create a transform buffer and listener
         self._tf_buffer = Buffer()
         self._tf_listener = TransformListener(self._tf_buffer, self)
-        
-        # Listen to the transform between frames
+
+        # Listen to the transform between frames periodically
         self._listener_timer = self.create_timer(1, self._listener_cb)
-        
+
     def _listener_cb(self):
         '''
         Callback function for the listener timer.
@@ -50,8 +56,10 @@ class ListenerDemo(Node):
             self.get_logger().info(
                 f"Transform between {self._parent_frame} and {self._child_frame}: \n" + str(transform))
         except TransformException as ex:
-            self.get_logger().info("Could not get transform between first_static_frame and second_static_frame: " + str(ex))
-    
+            self.get_logger().fatal(
+                f"Could not get transform between {self._parent_frame} and {self._child_frame}: {str(ex)}")
+
+
 class BroadcasterDemo(Node):
     '''
     Class to broadcast Frames. This class consists of a static broadcaster and a dynamic broadcaster.
@@ -61,7 +69,7 @@ class BroadcasterDemo(Node):
         super().__init__(node_name)
 
         self.transforms = []
-        
+
         # Create a static broadcaster
         self.tf_static_broadcaster = StaticTransformBroadcaster(self)
         # Publish the static frames once
@@ -72,8 +80,6 @@ class BroadcasterDemo(Node):
         # Publish the dynamic frames periodically because they are changing with time
         self._dynamic_broadcaster_timer = self.create_timer(
             0.005, self.dynamic_broadcaster_cb)
-
-        
 
     def publish_static_frames(self):
         '''
@@ -110,9 +116,9 @@ class BroadcasterDemo(Node):
         '''
         Callback function for the dynamic broadcaster timer.
         '''
-        
+
         self.transforms.clear()
-        
+
         # Generate a random pose
         pose = Pose()
         pose.position.x = 3.5
