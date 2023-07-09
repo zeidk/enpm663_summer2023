@@ -1,11 +1,57 @@
 
 import math
+import rclpy
 from rclpy.node import Node
 from tf2_ros.static_transform_broadcaster import StaticTransformBroadcaster
 from tf2_ros import TransformBroadcaster
 from geometry_msgs.msg import TransformStamped, Pose
+from tf2_ros import TransformException
+from tf2_ros.buffer import Buffer
+from tf2_ros.transform_listener import TransformListener
 
+class ListenerDemo(Node):
+    '''
+    Class to listen to the frames broadcast by the broadcaster.
+    '''  
 
+    def __init__(self, node_name):
+        super().__init__(node_name)
+        
+        self._demo_type = self.declare_parameter(
+            'demo_type', 'broadcast').get_parameter_value().string_value
+    
+        self._parent_frame = self.declare_parameter(
+            'parent_frame', 'world').get_parameter_value().string_value
+        
+        self._child_frame = self.declare_parameter(
+            'child_frame', 'first_dynamic_frame').get_parameter_value().string_value
+        
+        if self._demo_type not in ['broadcast', 'both']:
+            raise ValueError('demo_type must be either broadcast or both')
+        
+        # Execute the listener only if the demo_type is both
+        if self._demo_type == 'broadcast':
+            return
+        
+        self._tf_buffer = Buffer()
+        self._tf_listener = TransformListener(self._tf_buffer, self)
+        
+        # Listen to the transform between frames
+        self._listener_timer = self.create_timer(1, self._listener_cb)
+        
+    def _listener_cb(self):
+        '''
+        Callback function for the listener timer.
+        '''
+        try:
+            # Get the transform between frames
+            transform = self._tf_buffer.lookup_transform(
+                self._parent_frame, self._child_frame, rclpy.time.Time())
+            self.get_logger().info(
+                f"Transform between {self._parent_frame} and {self._child_frame}: \n" + str(transform))
+        except TransformException as ex:
+            self.get_logger().info("Could not get transform between first_static_frame and second_static_frame: " + str(ex))
+    
 class BroadcasterDemo(Node):
     '''
     Class to broadcast Frames. This class consists of a static broadcaster and a dynamic broadcaster.

@@ -17,7 +17,7 @@ ament_python_install_package(${PROJECT_NAME})
 
 # Install Python executables
 install(PROGRAMS
-  nodes/broadcaster_demo_exe.py
+  nodes/frame_demo_exe.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
