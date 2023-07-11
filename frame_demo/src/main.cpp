@@ -12,10 +12,11 @@ int main(int argc, char *argv[])
     rclcpp::executors::MultiThreadedExecutor executor;
     executor.add_node(kdl_frame_demo_node);
     executor.add_node(broadcaster_demo_node);
-    std::thread([&executor]()
-                { executor.spin(); })
-        .detach();
-    kdl_frame_demo_node->run();
-    broadcaster_demo_node->run();
+    executor.spin();
+    // std::thread([&executor]()
+    //             { executor.spin(); })
+    //     .detach();
+    // kdl_frame_demo_node->run();
+    // broadcaster_demo_node->run();
     rclcpp::shutdown();
 }

@@ -30,6 +30,7 @@ public:
             // timer to publish the transform
         broadcast_timer_ = this->create_wall_timer(std::chrono::milliseconds(1000),
                                                    std::bind(&BroadcasterDemo::broadcast_timer_cb_, this));
+        run();
     }
 
     /**
