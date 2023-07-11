@@ -223,10 +223,10 @@ class BroadcasterDemo(Node):
 
     def publish_static_frames(self):
         '''
-        Build the static frames and publish them once.
+        Build two static frames and publish them once.
         '''
 
-        # Generate a random pose
+        # Generate an arbitrary pose
         pose = Pose()
         pose.position.x = 3.5
         pose.position.y = 4.0
@@ -239,7 +239,7 @@ class BroadcasterDemo(Node):
         pose.orientation.z = quaternion[3]
         self.generate_transform("world", "first_static_frame", pose)
 
-        # Generate a random pose
+        # Generate an arbitrary pose
         pose.position.x = 1.5
         pose.position.y = 2.0
         pose.position.z = 3.0

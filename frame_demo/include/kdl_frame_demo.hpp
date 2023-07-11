@@ -23,6 +23,9 @@ public:
         }
 
         RCLCPP_INFO(this->get_logger(), "KDL demo started");
+
+        // Create a utils object to use the utility functions
+        utils_ptr_ = std::make_shared<Utils>();
     }
 
 
@@ -34,6 +37,7 @@ public:
 
 private:
     bool param_kdl_;
+    std::shared_ptr<Utils> utils_ptr_;
 
     /**
      * @brief Hardcode the pose of a camera in the world frame

@@ -9,8 +9,7 @@ void KDLFrameDemo::run() {
     if (!param_kdl_) {
         return;
     }
-    // create a unique pointer to the Utils class
-    auto utils_ptr = std::make_unique<Utils>();
+    
     geometry_msgs::msg::Pose camera_pose_in_world = set_camera_pose_in_world();
     geometry_msgs::msg::Pose part_pose_in_camera = set_part_pose_in_camera();
     geometry_msgs::msg::Pose part_pose_in_world = multiply_kdl_frames(camera_pose_in_world, part_pose_in_camera);
@@ -21,7 +20,7 @@ void KDLFrameDemo::run() {
     // See http://wiki.ros.org/tf2/Tutorials/Quaternions
     tf2::Quaternion quat_tf;
     tf2::fromMsg(part_pose_in_world.orientation, quat_tf);
-    auto rpy = utils_ptr->set_euler_from_quaternion(quat_tf);
+    auto rpy = utils_ptr_->set_euler_from_quaternion(quat_tf);
 
     RCLCPP_INFO(this->get_logger(),
                 "Part position in world frame:\n x: %f, y: %f, z: %f",
@@ -34,15 +33,12 @@ void KDLFrameDemo::run() {
 geometry_msgs::msg::Pose
 KDLFrameDemo::set_camera_pose_in_world()
 {
-    // create a unique pointer to the Utils class
-    auto utils_ptr = std::make_unique<Utils>();
 
-    auto utils = Utils();
     auto pose = geometry_msgs::msg::Pose();
     pose.position.x = -2.286;
     pose.position.y = 2.96;
     pose.position.z = 1.8;
-    geometry_msgs::msg::Quaternion quaternion = utils_ptr->set_quaternion_from_euler(M_PI, M_PI / 2, 0);
+    geometry_msgs::msg::Quaternion quaternion = utils_ptr_->set_quaternion_from_euler(M_PI, M_PI / 2, 0);
     pose.orientation.w = quaternion.w;
     pose.orientation.x = quaternion.x;
     pose.orientation.y = quaternion.y;

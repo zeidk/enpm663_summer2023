@@ -32,7 +32,7 @@ endforeach()
 #-----------------------------
 # C++
 #-----------------------------
-add_executable(frame_demo_exe src/kdl_frame_demo.cpp src/utils.cpp src/main.cpp)
+add_executable(frame_demo_exe src/broadcaster_demo.cpp src/kdl_frame_demo.cpp src/utils.cpp src/main.cpp)
 ament_target_dependencies(frame_demo_exe ${FRAME_DEMO_INCLUDE_DEPENDS})
 
 install(TARGETS frame_demo_exe
