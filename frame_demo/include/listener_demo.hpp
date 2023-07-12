@@ -27,6 +27,11 @@ public:
 
         // load a buffer of transforms
         // tf_buffer_ = std::make_unique<tf2_ros::Buffer>(this->get_clock());
+        tf_buffer_ =
+            std::make_unique<tf2_ros::Buffer>(this->get_clock());
+        transform_listener_ =
+            std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
+
         // timer to listen to the transforms
         listen_timer_ = this->create_wall_timer(std::chrono::milliseconds(1000),
                                                 std::bind(&ListenerDemo::listen_timer_cb_, this));
@@ -37,7 +42,9 @@ public:
 private:
     bool param_listen_;
     /*!< Buffer that stores several seconds of transforms for easy lookup by the listener. */
-    // std::shared_ptr<tf2_ros::Buffer> tf_buffer_;
+    std::unique_ptr<tf2_ros::Buffer> tf_buffer_;
+
+    std::shared_ptr<tf2_ros::TransformListener> transform_listener_{nullptr};
 
     /*!< Wall timer object */
     rclcpp::TimerBase::SharedPtr listen_timer_;

@@ -7,21 +7,16 @@
 
 // needed for the listener
 #include <tf2/exceptions.h>
-
-
+// allows to use, 50ms, etc
+using namespace std::chrono_literals;
 
 void ListenerDemo::listen_transform(const std::string &source_frame, const std::string &target_frame)
 {
-    // load a buffer of transforms
-    auto tf_buffer = std::make_unique<tf2_ros::Buffer>(this->get_clock());
-
     geometry_msgs::msg::TransformStamped t_stamped;
     geometry_msgs::msg::Pose pose_out;
-    tf_buffer->setUsingDedicatedThread(true);
-
     try
     {
-        t_stamped = tf_buffer->lookupTransform(source_frame, target_frame, this->get_clock()->now(), rclcpp::Duration(1.0));
+        t_stamped = tf_buffer_->lookupTransform(source_frame, target_frame, tf2::TimePointZero, 50ms);
     }
     catch (const tf2::TransformException &ex)
     {
