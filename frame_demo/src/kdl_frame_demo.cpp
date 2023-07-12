@@ -5,11 +5,6 @@
 #include <utils.hpp>
 
 void KDLFrameDemo::run() {
-
-    if (!param_kdl_) {
-        return;
-    }
-    
     geometry_msgs::msg::Pose camera_pose_in_world = set_camera_pose_in_world();
     geometry_msgs::msg::Pose part_pose_in_camera = set_part_pose_in_camera();
     geometry_msgs::msg::Pose part_pose_in_world = multiply_kdl_frames(camera_pose_in_world, part_pose_in_camera);
@@ -22,12 +17,16 @@ void KDLFrameDemo::run() {
     tf2::fromMsg(part_pose_in_world.orientation, quat_tf);
     auto rpy = utils_ptr_->set_euler_from_quaternion(quat_tf);
 
-    RCLCPP_INFO(this->get_logger(),
-                "Part position in world frame:\n x: %f, y: %f, z: %f",
-                part_pose_in_world.position.x, part_pose_in_world.position.y, part_pose_in_world.position.z);
-    RCLCPP_INFO(this->get_logger(),
-                "Part orientation in world frame:\n rpy: %f, %f, %f",
-                rpy[0], rpy[1], rpy[2]);
+    std::string output{};
+    output += "\n================================================\n"; 
+    output += "Part position in world frame:\n x: " + std::to_string(part_pose_in_world.position.x) +
+                                                                                                                          ", y: " + std::to_string(part_pose_in_world.position.y) +
+                                                                                                                          ", z: " + std::to_string(part_pose_in_world.position.z);
+
+    output += "\nPart orientation in world frame:\n rpy: " + std::to_string(rpy[0]) + ", " + std::to_string(rpy[1]) + ", " + std::to_string(rpy[2]) + "\n";
+    output += "================================================\n";
+
+    RCLCPP_INFO_STREAM(this->get_logger(), output);
 }
 
 geometry_msgs::msg::Pose

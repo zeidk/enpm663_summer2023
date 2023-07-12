@@ -16,10 +16,6 @@ int main(int argc, char *argv[])
     executor.add_node(broadcaster_demo_node);
     executor.add_node(listener_demo_node);
     executor.spin();
-    // std::thread([&executor]()
-    //             { executor.spin(); })
-    //     .detach();
-    // kdl_frame_demo_node->run();
-    // broadcaster_demo_node->run();
+
     rclcpp::shutdown();
 }

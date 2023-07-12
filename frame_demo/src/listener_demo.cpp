@@ -29,7 +29,7 @@ void ListenerDemo::listen_transform(const std::string &source_frame, const std::
     pose_out.position.z = t_stamped.transform.translation.z;
     pose_out.orientation = t_stamped.transform.rotation;
 
-    RCLCPP_INFO_STREAM(this->get_logger(), source_frame << " in " << target_frame << ":\n"
+    RCLCPP_INFO_STREAM(this->get_logger(), target_frame << " in " << source_frame << ":\n"
                                                         << "x: " << pose_out.position.x << "\t"
                                                         << "y: " << pose_out.position.y << "\t"
                                                         << "z: " << pose_out.position.z << "\n"

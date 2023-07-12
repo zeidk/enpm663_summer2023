@@ -7,6 +7,9 @@
 #include <tf2_ros/transform_listener.h>
 #include <tf2_ros/buffer.h>
 
+// allows to use, 50ms, etc
+using namespace std::chrono_literals;
+
 class ListenerDemo : public rclcpp::Node
 {
 public:
@@ -19,33 +22,29 @@ public:
         // do not execute the demo if the parameter is false
         if (!param_listen_)
         {
-            RCLCPP_INFO(this->get_logger(), "Listener demo not started");
+            RCLCPP_WARN(this->get_logger(), "Listener demo not started");
             return;
         }
 
         RCLCPP_INFO(this->get_logger(), "Listener demo started");
 
         // load a buffer of transforms
-        // tf_buffer_ = std::make_unique<tf2_ros::Buffer>(this->get_clock());
         tf_buffer_ =
             std::make_unique<tf2_ros::Buffer>(this->get_clock());
         transform_listener_ =
             std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
 
         // timer to listen to the transforms
-        listen_timer_ = this->create_wall_timer(std::chrono::milliseconds(1000),
-                                                std::bind(&ListenerDemo::listen_timer_cb_, this));
-        // // run the demo
-        // run();
+        listen_timer_ = this->create_wall_timer(1s, std::bind(&ListenerDemo::listen_timer_cb_, this));
     }
 
 private:
+    /*!< Boolean variable to store the value of the parameter "listen" */
     bool param_listen_;
     /*!< Buffer that stores several seconds of transforms for easy lookup by the listener. */
     std::unique_ptr<tf2_ros::Buffer> tf_buffer_;
-
+    /*!< Transform listener object */
     std::shared_ptr<tf2_ros::TransformListener> transform_listener_{nullptr};
-
     /*!< Wall timer object */
     rclcpp::TimerBase::SharedPtr listen_timer_;
 

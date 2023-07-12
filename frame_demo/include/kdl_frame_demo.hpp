@@ -9,7 +9,7 @@ class KDLFrameDemo : public rclcpp::Node
 public:
     KDLFrameDemo(std::string node_name) : Node(node_name)
     {
-        
+
         // parameter to decide whether to execute the demo or not
         this->declare_parameter("kdl", false);
         param_kdl_ = this->get_parameter("kdl").as_bool();
@@ -17,37 +17,39 @@ public:
         // do not execute the demo if the parameter 'kdl' is false
         if (!param_kdl_)
         {
-            RCLCPP_INFO(this->get_logger(), "KDL demo not started");
+            RCLCPP_WARN(this->get_logger(), "KDL demo not started");
             return;
         }
 
         RCLCPP_INFO(this->get_logger(), "KDL demo started");
 
-        // Create a utils object to use the utility functions
+        // initialize a utils object to use the utility functions
         utils_ptr_ = std::make_shared<Utils>();
+        run();
     }
-
 
     /**
      * @brief Run the KDL demo
-     * 
+     *
      */
     void run();
 
 private:
+    /*!< Boolean variable to store the value of the parameter "kdl" */
     bool param_kdl_;
+    /*!< Utils object to access utility functions*/
     std::shared_ptr<Utils> utils_ptr_;
 
     /**
      * @brief Hardcode the pose of a camera in the world frame
-     * 
+     *
      * @return geometry_msgs::msg::Pose Pose of the camera in the world frame
      */
     geometry_msgs::msg::Pose set_camera_pose_in_world();
 
     /**
      * @brief Hardcode the pose of a part in the camera frame
-     * 
+     *
      * This pose should be retrieved from a camera subscriber
      * @return geometry_msgs::msg::Pose Pose of the part in the camera frame
      */

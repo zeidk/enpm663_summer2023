@@ -24,7 +24,7 @@ public:
         // do not execute the demo if the parameter is false
         if (!param_broadcast_)
         {
-            RCLCPP_INFO(this->get_logger(), "Broadcaster demo not started");
+            RCLCPP_WARN(this->get_logger(), "Broadcaster demo not started");
             return;
         }
         RCLCPP_INFO(this->get_logger(), "Broadcaster demo started");
@@ -63,7 +63,7 @@ private:
     std::shared_ptr<tf2_ros::StaticTransformBroadcaster> tf_static_broadcaster_;
     /*!< Broadcaster object */
     std::shared_ptr<tf2_ros::TransformBroadcaster> tf_broadcaster_;
-    /*!< Utils object */
+    /*!< Utils object to access utility functions*/
     std::shared_ptr<Utils> utils_ptr_;
     /*!< Wall timer object for the broadcaster*/
     rclcpp::TimerBase::SharedPtr broadcast_timer_;
