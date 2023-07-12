@@ -55,11 +55,13 @@ class KDLFrameDemo(Node):
 
     def __init__(self, node_name):
         super().__init__(node_name)
-        # Do not execute the listener if the demo_type is broadcast
+        
+        # Get the kdl parameter
         self._kdl = self.declare_parameter(
             'kdl', False).get_parameter_value().bool_value
-
+        # Do not execute the demo if kdl is false
         if not self._kdl:
+            self.get_logger().warn("KDL demo is not started.")
             return
 
         self.get_logger().info('KDL demo started')
@@ -162,7 +164,7 @@ class ListenerDemo(Node):
     def __init__(self, node_name):
         super().__init__(node_name)
 
-        # Parameter to choose whether to broadcast or listen
+        # Get the listen parameter
         self._listen = self.declare_parameter(
             'listen', False).get_parameter_value().bool_value
 
@@ -174,9 +176,12 @@ class ListenerDemo(Node):
         self._child_frame = self.declare_parameter(
             'child_frame', 'first_dynamic_frame').get_parameter_value().string_value
 
-        # Do not execute the listener if the demo_type is broadcast
+        # Do not execute the demo if listen is false
         if not self._listen:
+            self.get_logger().warn("Listener demo is not started.")
             return
+        
+        self.get_logger().info('Listener demo started')
 
         # Create a transform buffer and listener
         self._tf_buffer = Buffer()
@@ -207,6 +212,16 @@ class BroadcasterDemo(Node):
 
     def __init__(self, node_name):
         super().__init__(node_name)
+        
+        # Get the broadcast parameter
+        self._broadcast = self.declare_parameter(
+            'broadcast', True).get_parameter_value().bool_value
+        # Do not execute the demo if broadcast is false
+        if not self._broadcast:
+            self.get_logger().warn("Broadcaster demo is not started.")
+            return
+        
+        self.get_logger().info('Broadcaster demo started')
 
         self.transforms = []
 
