@@ -1,5 +1,6 @@
 
 import math
+from typing import Tuple
 import rclpy
 import PyKDL
 from rclpy.node import Node
@@ -11,54 +12,60 @@ from tf2_ros.buffer import Buffer
 from tf2_ros.transform_listener import TransformListener
 
 # For type hints
-from typing import Tuple
 
 
 def rpy_from_quaternion(quaternion: Quaternion) -> Tuple[float, float, float]:
     ''' 
     Use KDL to convert a quaternion to euler angles roll, pitch, yaw.
     Args:
-        q (Quaternion): quaternion to convert
+        quaternion (Quaternion): quaternion to convert
     Returns:
-        Tuple[float, float, float]: roll, pitch, yaw
+        Tuple[float, float, float]: A tuple containing roll, pitch, and yaw
     '''
 
     rotation = PyKDL.Rotation.Quaternion(quaternion.x, quaternion.y, quaternion.z, quaternion.w)
     return rotation.GetRPY()
 
 
-def quaternion_from_euler(roll, pitch, yaw):
-    """
-        Converts euler roll, pitch, yaw to quaternion (w in first place)
-        quat = [w, x, y, z]
-        """
-    cy = math.cos(yaw * 0.5)
-    sy = math.sin(yaw * 0.5)
-    cp = math.cos(pitch * 0.5)
-    sp = math.sin(pitch * 0.5)
-    cr = math.cos(roll * 0.5)
-    sr = math.sin(roll * 0.5)
+def quaternion_from_euler(roll: float, pitch: float, yaw: float) -> Tuple[float, float, float, float]:
+    '''
+    Converts euler roll, pitch, yaw to a tuple of quaternion values (JPL convention).
 
-    quaternion = [0] * 4
-    quaternion[0] = cy * cp * cr + sy * sp * sr
-    quaternion[1] = cy * cp * sr - sy * sp * cr
-    quaternion[2] = sy * cp * sr + cy * sp * cr
-    quaternion[3] = sy * cp * cr - cy * sp * sr
+    Returns:
+        Quaternion: tuple of quaternion values (JPL convention)
+    '''
+    quaternion = PyKDL.Rotation.RPY(roll, pitch, yaw).GetQuaternion()
+
+    # Other way to do it
+    # cy = math.cos(yaw * 0.5)
+    # sy = math.sin(yaw * 0.5)
+    # cp = math.cos(pitch * 0.5)
+    # sp = math.sin(pitch * 0.5)
+    # cr = math.cos(roll * 0.5)
+    # sr = math.sin(roll * 0.5)
+
+    # quaternion = [0] * 4
+    # quaternion[0] = cy * cp * cr + sy * sp * sr
+    # quaternion[1] = cy * cp * sr - sy * sp * cr
+    # quaternion[2] = sy * cp * sr + cy * sp * cr
+    # quaternion[3] = sy * cp * cr - cy * sp * sr
 
     return quaternion
 
 
 class KDLFrameDemo(Node):
     '''
-    Class showing how to use KDLFrame to compute the pose of a part in the 'world' frame.
+    Class showing how to use KDL Frame to compute the pose of a part in the 'world' frame.
     '''
 
     def __init__(self, node_name):
         super().__init__(node_name)
-        
+
         # Get the kdl parameter
         self._kdl = self.declare_parameter(
             'kdl', False).get_parameter_value().bool_value
+        """Parameter kdl to enable/disable the KDL demo. Default is false."""
+        
         # Do not execute the demo if kdl is false
         if not self._kdl:
             self.get_logger().warn("KDL demo is not started.")
@@ -80,29 +87,35 @@ class KDLFrameDemo(Node):
     def set_camera_pose_in_world(self):
         '''
         Set the pose of the camera in the world frame.
-        Information about the camera pose is obtained from the sensors.yaml file.
+        Information about the camera pose can be obtained in two different ways:
+        
+            - From the sensors.yaml file
+            - By clicking on the camera in gazebo.
 
         Returns:
             Pose: The pose of the camera in the world frame
         '''
+        
+        # Create a pose object for right_bins_camera
         pose = Pose()
         pose.position.x = -2.286
         pose.position.y = 2.96
         pose.position.z = 1.8
 
-        quaternion = quaternion_from_euler(math.pi, math.pi/2, 0)
-        pose.orientation.w = quaternion[0]
-        pose.orientation.x = quaternion[1]
-        pose.orientation.y = quaternion[2]
-        pose.orientation.z = quaternion[3]
+        quat_x, quat_y, quat_z, quat_w = quaternion_from_euler(math.pi, math.pi/2, 0)
+        pose.orientation.x = quat_x
+        pose.orientation.y = quat_y
+        pose.orientation.z = quat_z
+        pose.orientation.w = quat_w
 
         return pose
 
     def set_part_pose_in_camera(self):
         '''
         Set the pose of the part detected by the camera.
-        Information about the part pose is obtained from the camera subscriber.
+        Information about the part pose should be obtained from the camera subscriber.
         Here we are hardcoding this information for the sake of simplicity.
+        The hardcoded pose was retrieved directly from gazebo.
 
         Returns:
             Pose: The pose of the part in the camera frame
@@ -180,7 +193,7 @@ class ListenerDemo(Node):
         if not self._listen:
             self.get_logger().warn("Listener demo is not started.")
             return
-        
+
         self.get_logger().info('Listener demo started')
 
         # Create a transform buffer and listener
@@ -212,7 +225,7 @@ class BroadcasterDemo(Node):
 
     def __init__(self, node_name):
         super().__init__(node_name)
-        
+
         # Get the broadcast parameter
         self._broadcast = self.declare_parameter(
             'broadcast', True).get_parameter_value().bool_value
@@ -220,7 +233,7 @@ class BroadcasterDemo(Node):
         if not self._broadcast:
             self.get_logger().warn("Broadcaster demo is not started.")
             return
-        
+
         self.get_logger().info('Broadcaster demo started')
 
         self.transforms = []
@@ -241,29 +254,31 @@ class BroadcasterDemo(Node):
         Build two static frames and publish them once.
         '''
 
-        # Generate an arbitrary pose
+        # Generate a first arbitrary pose
         pose = Pose()
         pose.position.x = 3.5
         pose.position.y = 4.0
         pose.position.z = 5.0
 
-        quaternion = quaternion_from_euler(math.pi/2, math.pi/3, math.pi/4)
-        pose.orientation.w = quaternion[0]
-        pose.orientation.x = quaternion[1]
-        pose.orientation.y = quaternion[2]
-        pose.orientation.z = quaternion[3]
+        quat_x, quat_y, quat_z, quat_w = quaternion_from_euler(math.pi/2, math.pi/3, math.pi/4)
+        pose.orientation.x = quat_x
+        pose.orientation.y = quat_y
+        pose.orientation.z = quat_z
+        pose.orientation.w = quat_w
+
         self.generate_transform("world", "first_static_frame", pose)
 
-        # Generate an arbitrary pose
+        # Generate a second arbitrary pose
         pose.position.x = 1.5
         pose.position.y = 2.0
         pose.position.z = 3.0
 
-        quaternion = quaternion_from_euler(math.pi/5, math.pi/5, math.pi/5)
-        pose.orientation.w = quaternion[0]
-        pose.orientation.x = quaternion[1]
-        pose.orientation.y = quaternion[2]
-        pose.orientation.z = quaternion[3]
+        quat_x, quat_y, quat_z, quat_w = quaternion_from_euler(math.pi/5, math.pi/5, math.pi/5)
+        pose.orientation.x = quat_x
+        pose.orientation.y = quat_y
+        pose.orientation.z = quat_z
+        pose.orientation.w = quat_w
+
         self.generate_transform("world", "second_static_frame", pose)
         self.tf_static_broadcaster.sendTransform(self.transforms)
 
@@ -280,24 +295,12 @@ class BroadcasterDemo(Node):
         pose.position.y = 4.0
         pose.position.z = 5.0
 
-        quaternion = quaternion_from_euler(math.pi/2, math.pi/3, math.pi/4)
-        pose.orientation.w = quaternion[0]
-        pose.orientation.x = quaternion[1]
-        pose.orientation.y = quaternion[2]
-        pose.orientation.z = quaternion[3]
-        self.generate_transform("world", "first_dynamic_frame", pose)
-
-        # Generate a random pose
-        pose.position.x = 1.5
-        pose.position.y = 2.0
-        pose.position.z = 3.0
-
-        quaternion = quaternion_from_euler(math.pi/5, math.pi/5, math.pi/5)
-        pose.orientation.w = quaternion[0]
-        pose.orientation.x = quaternion[1]
-        pose.orientation.y = quaternion[2]
-        pose.orientation.z = quaternion[3]
-        self.generate_transform("world", "second_dynamic_frame", pose)
+        quat_x, quat_y, quat_z, quat_w = quaternion_from_euler(math.pi/2, math.pi/3, math.pi/4)
+        pose.orientation.x = quat_x
+        pose.orientation.y = quat_y
+        pose.orientation.z = quat_z
+        pose.orientation.w = quat_w
+        self.generate_transform("world", "dynamic_frame", pose)
 
         self.send_dynamic_transforms()
 
