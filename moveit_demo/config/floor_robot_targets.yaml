@@ -1,0 +1,24 @@
+joint_positions:
+  rail_positions:
+    agv1: -4.5
+    agv2: -1.2
+    agv3: 1.2
+    agv4: 4.5
+    left_bins: 3
+    right_bins: -3
+  kit_tray_station_1:
+    linear_actuator_joint: 4.0
+    floor_shoulder_pan_joint: 1.57
+    floor_shoulder_lift_joint: -1.57
+    floor_elbow_joint: 1.57
+    floor_wrist_1_joint: -1.57
+    floor_wrist_2_joint: -1.57
+    floor_wrist_3_joint: 0.0
+  kit_tray_station_2:
+    linear_actuator_joint: -4.0
+    floor_shoulder_pan_joint: -1.57
+    floor_shoulder_lift_joint: -1.57
+    floor_elbow_joint: 1.57
+    floor_wrist_1_joint: -1.57
+    floor_wrist_2_joint: -1.57
+    floor_wrist_3_joint: 0.0   
