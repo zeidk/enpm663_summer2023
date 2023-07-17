@@ -1,0 +1,4 @@
+<map id="FloorRobot::add_models_to_planning_scene_" name="FloorRobot::add_models_to_planning_scene_">
+<area shape="rect" id="node1" title="Add static models to the planning scene." alt="" coords="225,5,405,47"/>
+<area shape="rect" id="node2" href="$class_floor_robot.html#a9f59d5385824b89d7fc9a60bbe345283" title="Construct a new FloorRobot object." alt="" coords="5,13,177,39"/>
+</map>

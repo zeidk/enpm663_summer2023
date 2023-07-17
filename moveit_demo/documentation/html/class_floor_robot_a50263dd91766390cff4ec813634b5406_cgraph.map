@@ -1,0 +1,4 @@
+<map id="FloorRobot::wait_for_attach_completion_" name="FloorRobot::wait_for_attach_completion_">
+<area shape="rect" id="node1" title="Wait for the gripper to attach the object." alt="" coords="5,5,163,47"/>
+<area shape="rect" id="node2" href="$class_floor_robot.html#a42e5796adbbbc5685908212e4b49c9f6" title="Move the floor robot through waypoints." alt="" coords="211,5,405,47"/>
+</map>

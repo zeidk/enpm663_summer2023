@@ -1,3 +1,25 @@
+/*! \mainpage Main page for the floor robot demo
+ *
+ * \section Installation
+ *
+ * - cd ~/ariac_ws/src
+ * - git clone https://github.com/zeidk/enpm663_summer2023.git -b lecture8
+ * - cd ~/ariac_ws
+ * - rosdep install --from-paths src -y -i --rosdistro galactic
+ * - colcon build
+ */
+
+/*!
+ *  \brief     Class for the floor robot.
+ *  \details   The floor robot is capable of completing kitting tasks.
+ *  \author    Zeid Kootbally
+ *  \author    John Doe (add your teammate's name here)
+ *  \version   0.1
+ *  \date      July 2023
+ *  \warning   Improper use can crash your application
+ *  \copyright GNU Public License.
+ */
+
 #pragma once
 
 // RCLCPP
@@ -277,12 +299,24 @@ private:
     //! Part attached to the gripper.
     ariac_msgs::msg::Part floor_robot_attached_part_;
     //! Pose of the camera "kts1_camera" in the world frame
+    /*! 
+    \note This attribute is set in the camera callback. You can hardcode it if you prefer.
+    */
     geometry_msgs::msg::Pose kts1_camera_pose_;
     //! Pose of the camera "kts2_camera" in the world frame
+    /*!
+    \note This attribute is set in the camera callback. You can hardcode it if you prefer.
+    */
     geometry_msgs::msg::Pose kts2_camera_pose_;
     //! Pose of the camera "left_bins_camera" in the world frame
+    /*!
+    \note This attribute is set in the camera callback. You can hardcode it if you prefer.
+    */
     geometry_msgs::msg::Pose left_bins_camera_pose_;
     //! Pose of the camera "right_bins_camera" in the world frame
+    /*!
+    \note This attribute is set in the camera callback. You can hardcode it if you prefer.
+    */
     geometry_msgs::msg::Pose right_bins_camera_pose_;
     //! Pose of trays found by "kts1_camera"
     std::vector<ariac_msgs::msg::KitTrayPose> kts1_trays_;

@@ -1,0 +1,12 @@
+<map id="FloorRobot::FloorRobot" name="FloorRobot::FloorRobot">
+<area shape="rect" id="node1" title="Construct a new FloorRobot object." alt="" coords="5,234,177,261"/>
+<area shape="rect" id="node2" href="$class_floor_robot.html#a33c8a2b4c2915aab9a7b997a277c2593" title="Add static models to the planning scene." alt="" coords="239,37,419,79"/>
+<area shape="rect" id="node5" href="$class_floor_robot.html#ab2fa3ca52237fe79da9e9e4e17518ed1" title="Callback for &quot;/ariac/competition_state&quot; topic." alt="" coords="239,103,418,144"/>
+<area shape="rect" id="node6" href="$class_floor_robot.html#a39e3aeea98552ddff0315abcd9cb354c" title="Callback for &quot;/ariac/floor_robot_gripper_state&quot; topic." alt="" coords="237,168,421,209"/>
+<area shape="rect" id="node7" href="$class_floor_robot.html#a276ebc3030b9137c0bb357a93e360782" title="Callback for &quot;/ariac/sensors/kts1_camera/image&quot; topic." alt="" coords="225,234,432,261"/>
+<area shape="rect" id="node8" href="$class_floor_robot.html#a466afaedd012e521fdff63f24f74ab43" title="Callback for &quot;/ariac/sensors/kts2_camera/image&quot; topic." alt="" coords="225,285,432,311"/>
+<area shape="rect" id="node9" href="$class_floor_robot.html#ac8604b31c61eab4b914767ac42f97dcc" title="Callback for &quot;/ariac/sensors/left_bins_camera/image&quot; topic." alt="" coords="250,336,407,377"/>
+<area shape="rect" id="node10" href="$class_floor_robot.html#adec2c1f0d480f0a8d9afbaa49aba706f" title="Callback for &quot;/ariac/sensors/right_bins_camera/image&quot; topic." alt="" coords="246,401,411,443"/>
+<area shape="rect" id="node3" href="$class_floor_robot.html#a6fb6650718cddfa05d055531f757f7a5" title="Add a single model to the planning scene." alt="" coords="480,5,685,47"/>
+<area shape="rect" id="node4" href="$class_utils.html#a150d77055a3a8f27b665b3ae5fda0a56" title="Get the quaternion from euler object." alt="" coords="503,71,662,112"/>
+</map>

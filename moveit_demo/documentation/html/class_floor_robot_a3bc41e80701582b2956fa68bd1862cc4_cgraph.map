@@ -1,0 +1,14 @@
+<map id="FloorRobot::pick_and_place_tray_" name="FloorRobot::pick_and_place_tray_">
+<area shape="rect" id="node1" title="Pick a tray from the kit tray station and place it on the AGV." alt="" coords="5,291,164,332"/>
+<area shape="rect" id="node2" href="$class_floor_robot.html#a6fb6650718cddfa05d055531f757f7a5" title="Add a single model to the planning scene." alt="" coords="212,5,417,47"/>
+<area shape="rect" id="node3" href="$class_utils.html#ae4bd87736a535e3ef951522599e6edd7" title="Build a pose from a position and orientation." alt="" coords="497,77,628,103"/>
+<area shape="rect" id="node4" href="$class_floor_robot.html#ad50b67bfa4b8e91e2ea8a57ad70d854e" title="Change the gripper on the floor robot." alt="" coords="241,173,389,215"/>
+<area shape="rect" id="node5" href="$class_floor_robot.html#aca2292f6a0068ccf74e14e134026817a" title="Get the pose of a frame in the world frame." alt="" coords="483,132,643,173"/>
+<area shape="rect" id="node6" href="$class_floor_robot.html#a42e5796adbbbc5685908212e4b49c9f6" title="Move the floor robot through waypoints." alt="" coords="465,291,660,332"/>
+<area shape="rect" id="node7" href="$class_floor_robot.html#a067e072496ebcf80d617b8430cfe2d92" title="Set the orientation for the end effector of the robot." alt="" coords="481,207,644,248"/>
+<area shape="rect" id="node8" href="$class_utils.html#aaaad3e233a697d4d729c476b7a9621d9" title="Get the yaw from pose object." alt="" coords="238,356,391,397"/>
+<area shape="rect" id="node9" href="$class_floor_robot.html#ad107b58ed50f02a9e70545734e30a04a" title="Move the floor robot to the target pose." alt="" coords="235,421,394,463"/>
+<area shape="rect" id="node10" href="$class_utils.html#a2be3c1802fa432f478a4a2ca7e0cef69" title="Multiply two poses together and return the result." alt="" coords="235,487,394,514"/>
+<area shape="rect" id="node11" href="$class_floor_robot.html#aaaab7bb20234af726a550957b8ea9f87" title="Enable/disable the gripper on the floor robot." alt="" coords="227,539,402,580"/>
+<area shape="rect" id="node12" href="$class_floor_robot.html#a50263dd91766390cff4ec813634b5406" title="Wait for the gripper to attach the object." alt="" coords="236,291,393,332"/>
+</map>

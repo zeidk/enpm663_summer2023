@@ -10,7 +10,13 @@
 #include <tf2_kdl/tf2_kdl.h>
 #include <string>
 
-// create a utility class
+/**
+ * @brief Class containing utility functions
+ * 
+ * Place any functions that don't belong to a class here.
+ * Static methods allow any other class to use the functions without having to create an instance of the class.
+ * 
+ */
 class Utils
 {
 public:
@@ -43,10 +49,7 @@ public:
     /**
      * @brief Get the euler from quaternion object
      *
-     * @param quaternion
-     * @param roll
-     * @param pitch
-     * @param yaw
+     * @param quaternion  Quaternion to convert to euler
      * @return array[roll, pitch, yaw]
      */
     static std::array<double, 3> get_euler_from_quaternion(tf2::Quaternion quaternion)
@@ -68,8 +71,8 @@ public:
     /**
      * @brief Multiply two poses together and return the result
      *
-     * @param p1
-     * @param p2
+     * @param p1 Pose 1
+     * @param p2 Pose 2
      * @return geometry_msgs::msg::Pose
      */
     static geometry_msgs::msg::Pose multiply_poses(geometry_msgs::msg::Pose pose1, geometry_msgs::msg::Pose pose2)

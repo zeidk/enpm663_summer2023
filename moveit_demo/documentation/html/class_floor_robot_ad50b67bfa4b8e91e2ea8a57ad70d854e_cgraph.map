@@ -1,0 +1,7 @@
+<map id="FloorRobot::change_gripper_" name="FloorRobot::change_gripper_">
+<area shape="rect" id="node1" title="Change the gripper on the floor robot." alt="" coords="5,90,153,131"/>
+<area shape="rect" id="node2" href="$class_utils.html#ae4bd87736a535e3ef951522599e6edd7" title="Build a pose from a position and orientation." alt="" coords="233,5,364,32"/>
+<area shape="rect" id="node3" href="$class_floor_robot.html#aca2292f6a0068ccf74e14e134026817a" title="Get the pose of a frame in the world frame." alt="" coords="219,57,379,98"/>
+<area shape="rect" id="node4" href="$class_floor_robot.html#a42e5796adbbbc5685908212e4b49c9f6" title="Move the floor robot through waypoints." alt="" coords="201,122,396,163"/>
+<area shape="rect" id="node5" href="$class_floor_robot.html#a067e072496ebcf80d617b8430cfe2d92" title="Set the orientation for the end effector of the robot." alt="" coords="217,187,380,229"/>
+</map>
