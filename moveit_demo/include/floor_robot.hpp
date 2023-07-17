@@ -45,7 +45,9 @@
 #include <ariac_msgs/srv/change_gripper.hpp>
 #include <ariac_msgs/srv/vacuum_gripper_control.hpp>
 #include <ariac_msgs/srv/perform_quality_check.hpp>
+#include <ariac_msgs/srv/submit_order.hpp>
 #include <std_msgs/msg/bool.hpp>
+#include <ariac_msgs/msg/agv_status.hpp>
 // TF2
 #include "tf2/exceptions.h"
 #include "tf2_ros/transform_listener.h"
@@ -99,6 +101,24 @@ public:
     // Private attributes and methods
     //-----------------------------//
 private:
+    /**
+     * @brief Complete a single kitting task
+     *
+     * @param task  Kitting task to complete
+     * @return true  Successfully completed the kitting task
+     * @return false Failed to complete the kitting task
+     */
+    bool complete_kitting_task_(ariac_msgs::msg::KittingTask task);
+    //-----------------------------//
+
+    /**
+     * @brief Submit an order
+     * 
+     * @param order_id ID of the order to submit
+     */
+    bool submit_order_(std::string order_id);
+    //-----------------------------//
+
     /**
      * @brief Send the floor robot to the home configuration
      */
@@ -177,16 +197,6 @@ private:
     //-----------------------------//
 
     /**
-     * @brief Complete a kitting task
-     *
-     * @param task Kitting task to complete
-     * @return true Successfully completed the kitting task
-     * @return false Failed to complete the kitting task
-     */
-    bool complete_kitting_task_(ariac_msgs::msg::KittingTask task);
-    //-----------------------------//
-
-    /**
      * @brief Move the floor robot to the target pose
      *
      * The target pose is set in the moveit_demo/config/floor_robot.yaml file
@@ -252,6 +262,10 @@ private:
     void add_models_to_planning_scene_();
     //-----------------------------//
 
+    //! Current order being processed
+    ariac_msgs::msg::Order current_order_;
+    //! List of received orders
+    std::vector<ariac_msgs::msg::Order> orders_;
     //! Move group interface for the floor robot
     moveit::planning_interface::MoveGroupInterface floor_robot_;
     //! Planning scene interface for the workcell
@@ -267,6 +281,16 @@ private:
     std::shared_ptr<tf2_ros::TransformListener> tf_listener = std::make_shared<tf2_ros::TransformListener>(*tf_buffer);
     //! Subscriber for "/ariac/floor_robot_gripper_state" topic
     rclcpp::Subscription<ariac_msgs::msg::VacuumGripperState>::SharedPtr floor_gripper_state_sub_;
+    //! Subscriber for "/ariac/orders" topic
+    rclcpp::Subscription<ariac_msgs::msg::Order>::SharedPtr orders_sub_;
+    //! Subscriber for "/ariac/agv1_status" topic
+    rclcpp::Subscription<ariac_msgs::msg::AGVStatus>::SharedPtr agv1_status_sub_;
+    //! Subscriber for "/ariac/agv2_status" topic
+    rclcpp::Subscription<ariac_msgs::msg::AGVStatus>::SharedPtr agv2_status_sub_;
+    //! Subscriber for "/ariac/agv3_status" topic
+    rclcpp::Subscription<ariac_msgs::msg::AGVStatus>::SharedPtr agv3_status_sub_;
+    //! Subscriber for "/ariac/agv4_status" topic
+    rclcpp::Subscription<ariac_msgs::msg::AGVStatus>::SharedPtr agv4_status_sub_;
     //! Subscriber for "/ariac/competition_state" topic
     rclcpp::Subscription<ariac_msgs::msg::CompetitionState>::SharedPtr competition_state_sub_;
     //! Subscriber for "/ariac/sensors/kts1_camera/image" topic
@@ -299,7 +323,7 @@ private:
     //! Part attached to the gripper.
     ariac_msgs::msg::Part floor_robot_attached_part_;
     //! Pose of the camera "kts1_camera" in the world frame
-    /*! 
+    /*!
     \note This attribute is set in the camera callback. You can hardcode it if you prefer.
     */
     geometry_msgs::msg::Pose kts1_camera_pose_;
@@ -336,6 +360,8 @@ private:
     bool left_bins_camera_received_data = false;
     //! Whether "right_bins_camera" has received data or not
     bool right_bins_camera_received_data = false;
+    //! Callback for "/ariac/orders" topic
+    void orders_cb(const ariac_msgs::msg::Order::ConstSharedPtr msg);
     //! Callback for "/ariac/sensors/kts1_camera/image" topic
     void kts1_camera_cb(const ariac_msgs::msg::AdvancedLogicalCameraImage::ConstSharedPtr msg);
     //! Callback for "/ariac/sensors/kts2_camera/image" topic
@@ -416,4 +442,14 @@ private:
         {"floor_wrist_1_joint", -1.57},
         {"floor_wrist_2_joint", -1.57},
         {"floor_wrist_3_joint", 0.0}};
+    //! AGV locations for different AGVs.
+    /*!
+        The first value is the AGV number and the second value is the location of the AGV, the latter can be one of the following:
+        - KITTING=0
+        - ASSEMBLY_FRONT=1
+        - ASSEMBLY_BACK=2
+        - WAREHOUSE=3
+        - UNKNOWN=99
+    */
+    std::map<int, int> agv_locations_ = {{1, -1}, {2, -1}, {3, -1}, {4, -1}};
 };

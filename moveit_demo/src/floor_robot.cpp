@@ -16,6 +16,9 @@ FloorRobot::FloorRobot()
     subscription_cbg_ = create_callback_group(rclcpp::CallbackGroupType::MutuallyExclusive);
     options.callback_group = subscription_cbg_;
 
+    orders_sub_ = this->create_subscription<ariac_msgs::msg::Order>("/ariac/orders", 1,
+                                                                    std::bind(&FloorRobot::orders_cb, this, std::placeholders::_1), options);
+
     competition_state_sub_ = this->create_subscription<ariac_msgs::msg::CompetitionState>(
         "/ariac/competition_state", 1,
         std::bind(&FloorRobot::competition_state_cb, this, std::placeholders::_1), options);
@@ -61,6 +64,12 @@ FloorRobot::FloorRobot()
 FloorRobot::~FloorRobot()
 {
     floor_robot_.~MoveGroupInterface();
+}
+
+void FloorRobot::orders_cb(
+    const ariac_msgs::msg::Order::ConstSharedPtr msg)
+{
+    orders_.push_back(*msg);
 }
 
 //=============================================//
@@ -725,7 +734,6 @@ bool FloorRobot::complete_orders_()
             break;
         }
 
-        // complete each order from the queue
         if (orders_.size() == 0)
         {
             if (competition_state_ != ariac_msgs::msg::CompetitionState::ORDER_ANNOUNCEMENTS_DONE)
@@ -746,20 +754,51 @@ bool FloorRobot::complete_orders_()
 
         current_order_ = orders_.front();
         orders_.erase(orders_.begin());
+        int kitting_agv_num = -1;
 
         if (current_order_.type == ariac_msgs::msg::Order::KITTING)
         {
             FloorRobot::complete_kitting_task_(current_order_.kitting_task);
+            kitting_agv_num = current_order_.kitting_task.agv_number;
         }
-        // publish status
-        auto completed_order = competitor_interfaces::msg::CompletedOrder();
-        completed_order.order_id = current_order_.id;
-        completed_order_pub_->publish(completed_order);
-        FloorRobot::go_home_();
-    }
+        else 
+        {
+            RCLCPP_INFO(get_logger(), "Ignoring non-kitting tasks.");
+        }
+        
 
+        // loop until the AGV is at the warehouse
+        auto agv_location = -1;
+        while (agv_location != ariac_msgs::msg::AGVStatus::WAREHOUSE)
+        {
+            if (kitting_agv_num == 1)
+                agv_location = agv_locations_[1];
+            else if (kitting_agv_num == 2)
+                agv_location = agv_locations_[2];
+            else if (kitting_agv_num == 3)
+                agv_location = agv_locations_[3];
+            else if (kitting_agv_num == 4)
+                agv_location = agv_locations_[4];
+        }
+
+        FloorRobot::submit_order_(current_order_.id);
+    }
     return success;
-    // return true;
+}
+
+//=============================================//
+bool FloorRobot::submit_order_(std::string order_id)
+{
+    rclcpp::Client<ariac_msgs::srv::SubmitOrder>::SharedPtr client;
+    std::string srv_name = "/ariac/submit_order";
+    client = this->create_client<ariac_msgs::srv::SubmitOrder>(srv_name);
+    auto request = std::make_shared<ariac_msgs::srv::SubmitOrder::Request>();
+    request->order_id = order_id;
+
+    auto result = client->async_send_request(request);
+    result.wait();
+
+    return result.get()->success;
 }
 
 //=============================================//
