@@ -69,4 +69,13 @@ DESTINATION lib/${PROJECT_NAME}
 install(DIRECTORY include
   DESTINATION share/${PROJECT_NAME}/
 )
+
+install(DIRECTORY 
+  config
+  launch
+  meshes
+  rviz
+  DESTINATION share/${PROJECT_NAME}
+)
+
 ament_package()

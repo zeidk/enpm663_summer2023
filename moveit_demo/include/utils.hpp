@@ -154,7 +154,7 @@ public:
      * @param pose  Pose to get the yaw from
      * @return double  Yaw in radians
      */
-    double get_yaw_from_pose_(geometry_msgs::msg::Pose pose)
+    static double get_yaw_from_pose_(geometry_msgs::msg::Pose pose)
     {
         tf2::Quaternion q(
             pose.orientation.x,

@@ -26,7 +26,7 @@
 #include <rclcpp/qos.hpp>
 #include <rclcpp/rclcpp.hpp>
 #include <rclcpp_action/rclcpp_action.hpp>
-// #include <ament_index_cpp/get_package_share_directory.hpp>
+#include <ament_index_cpp/get_package_share_directory.hpp>
 // MoveIt
 #include <moveit/move_group_interface/move_group_interface.h>
 #include <moveit/planning_scene_interface/planning_scene_interface.h>

@@ -176,7 +176,7 @@ void FloorRobot::add_single_model_to_planning_scene_(
     shape_msgs::msg::Mesh mesh;
     shapes::ShapeMsg mesh_msg;
 
-    std::string package_share_directory = ament_index_cpp::get_package_share_directory("test_competitor");
+    std::string package_share_directory = ament_index_cpp::get_package_share_directory("moveit_demo");
     std::stringstream path;
     path << "file://" << package_share_directory << "/meshes/" << mesh_file;
     std::string model_path = path.str();

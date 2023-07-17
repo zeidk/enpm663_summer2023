@@ -1,3 +1,7 @@
+# This file is not currently used by the package.
+# It is here to show you that you can store joint positions in a yaml file.
+# This is an alternative to hard-coding the joint positions in the code.
+
 joint_positions:
   rail_positions:
     agv1: -4.5
