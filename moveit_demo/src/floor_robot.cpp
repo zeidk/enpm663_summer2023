@@ -43,13 +43,6 @@ FloorRobot::FloorRobot()
         "/ariac/floor_robot_gripper_state", rclcpp::SensorDataQoS(),
         std::bind(&FloorRobot::floor_gripper_state_cb, this, std::placeholders::_1), options);
 
-    // floor_robot_task_sub_ = this->create_subscription<competitor_interfaces::msg::FloorRobotTask>(
-    //     "/competitor/floor_robot_task", 1,
-    //     std::bind(&FloorRobot::floor_robot_task_cb, this, std::placeholders::_1), options);
-
-    // // Initialize publishers
-    // completed_order_pub_ = this->create_publisher<competitor_interfaces::msg::CompletedOrder>("/competitor/completed_order", 10);
-
     // Initialize service clients
     quality_checker_ = this->create_client<ariac_msgs::srv::PerformQualityCheck>("/ariac/perform_quality_check");
     floor_robot_tool_changer_ = this->create_client<ariac_msgs::srv::ChangeGripper>("/ariac/floor_robot_change_gripper");
@@ -66,6 +59,7 @@ FloorRobot::~FloorRobot()
     floor_robot_.~MoveGroupInterface();
 }
 
+//=============================================//
 void FloorRobot::orders_cb(
     const ariac_msgs::msg::Order::ConstSharedPtr msg)
 {

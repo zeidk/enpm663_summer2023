@@ -13,7 +13,7 @@ find_package(ament_cmake_python REQUIRED)
 # include folder which has all the header files
 include_directories(include)
 
-# Create a variable for all dependencies
+# create a variable for all dependencies
 set(MOVEIT_DEMO_INCLUDE_DEPENDS
   rclcpp 
   std_msgs
@@ -26,9 +26,10 @@ set(MOVEIT_DEMO_INCLUDE_DEPENDS
   tf2_geometry_msgs
   moveit_msgs
   geometric_shapes
+  moveit_ros_planning_interface
 )
 
-# Find all dependencies
+# find all dependencies
 foreach(dependency IN ITEMS ${MOVEIT_DEMO_INCLUDE_DEPENDS})
   find_package(${dependency} REQUIRED)
 endforeach()
