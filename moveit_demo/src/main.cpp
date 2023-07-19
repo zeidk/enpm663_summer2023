@@ -10,8 +10,15 @@ int main(int argc, char *argv[])
     std::thread([&executor]()
                 { executor.spin(); })
         .detach();
-    // floor_robot->go_home_();
+
+    // start the competition
+    floor_robot->start_competition_();
+    // move the robot to home pose
+    floor_robot->go_home_();
+    // complete orders
     floor_robot->complete_orders_();
+    // end the competition
+    floor_robot->end_competition_();
 
     rclcpp::shutdown();
 }

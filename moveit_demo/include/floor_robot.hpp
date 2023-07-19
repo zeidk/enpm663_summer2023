@@ -46,6 +46,8 @@
 #include <ariac_msgs/srv/vacuum_gripper_control.hpp>
 #include <ariac_msgs/srv/perform_quality_check.hpp>
 #include <ariac_msgs/srv/submit_order.hpp>
+#include <std_srvs/srv/trigger.hpp>
+#include <ariac_msgs/srv/move_agv.hpp>
 #include <std_msgs/msg/bool.hpp>
 #include <ariac_msgs/msg/agv_status.hpp>
 // TF2
@@ -90,12 +92,57 @@ public:
     ~FloorRobot();
 
     /**
+     * @brief Start the competition
+     *
+     * @return true  Successfully started the competition
+     * @return false  Failed to start the competition
+     */
+    bool start_competition_();
+    //-----------------------------//
+
+    /**
+     * @brief End the competition
+     *
+     * @return true  Successfully ended the competition
+     * @return false  Failed to end the competition
+     */
+    bool end_competition_();
+    //-----------------------------//
+
+    /**
+     * @brief Lock tray on the AGV
+     *
+     * @param agv_num  Number of the AGV to lock the tray on
+     * @return true  Successfully locked the tray
+     * @return false  Failed to lock the tray
+     */
+    bool lock_tray_(int agv_num);
+    //-----------------------------//
+
+    /**
+     * @brief Move an AGV to a location
+     *
+     * @param agv_num  Number of the AGV to move
+     * @param destination  Destination to move the AGV to
+     * @return true  Successfully moved the AGV
+     * @return false  Failed to move the AGV
+     */
+    bool move_agv_(int agv_num, int destination);
+    //-----------------------------//
+
+    /**
      * @brief Complete all the announced orders
      *
      * @return true Successfully completed all the orders
      * @return false Failed to complete all the orders
      */
     bool complete_orders_();
+
+    /**
+     * @brief Send the floor robot to the home configuration
+     */
+    void go_home_();
+    //-----------------------------//
 
     //-----------------------------//
     // Private attributes and methods
@@ -113,16 +160,10 @@ private:
 
     /**
      * @brief Submit an order
-     * 
+     *
      * @param order_id ID of the order to submit
      */
     bool submit_order_(std::string order_id);
-    //-----------------------------//
-
-    /**
-     * @brief Send the floor robot to the home configuration
-     */
-    void go_home_();
     //-----------------------------//
 
     /**
@@ -374,6 +415,14 @@ private:
     void competition_state_cb(const ariac_msgs::msg::CompetitionState::ConstSharedPtr msg);
     //! Callback for "/ariac/floor_robot_gripper_state" topic
     void floor_gripper_state_cb(const ariac_msgs::msg::VacuumGripperState::ConstSharedPtr msg);
+    //! Callback for "/ariac/agv1_status" topic
+    void agv1_status_cb(const ariac_msgs::msg::AGVStatus::ConstSharedPtr msg);
+    //! Callback for "/ariac/agv2_status" topic
+    void agv2_status_cb(const ariac_msgs::msg::AGVStatus::ConstSharedPtr msg);
+    //! Callback for "/ariac/agv3_status" topic
+    void agv3_status_cb(const ariac_msgs::msg::AGVStatus::ConstSharedPtr msg);
+    //! Callback for "/ariac/agv4_status" topic
+    void agv4_status_cb(const ariac_msgs::msg::AGVStatus::ConstSharedPtr msg);
     //! Client for "/ariac/perform_quality_check" service
     rclcpp::Client<ariac_msgs::srv::PerformQualityCheck>::SharedPtr quality_checker_;
     //! Client for "/ariac/floor_robot_change_gripper" service
