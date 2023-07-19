@@ -42,6 +42,7 @@
 #include <ariac_msgs/msg/kit_tray_pose.hpp>
 #include <ariac_msgs/msg/vacuum_gripper_state.hpp>
 #include <ariac_msgs/msg/competition_state.hpp>
+#include <std_msgs/msg/string.hpp>
 #include <ariac_msgs/srv/change_gripper.hpp>
 #include <ariac_msgs/srv/vacuum_gripper_control.hpp>
 #include <ariac_msgs/srv/perform_quality_check.hpp>
@@ -90,6 +91,17 @@ public:
      *
      */
     ~FloorRobot();
+    //-----------------------------//
+
+    /**
+     * @brief Callback for "/moveit_demo/floor_robot/go_home" service
+     *
+     * @param req Request for the service
+     * @param res Response for the service
+     */
+    void go_home_service_cb(
+        std_srvs::srv::Trigger::Request::SharedPtr req,
+        std_srvs::srv::Trigger::Response::SharedPtr res);
 
     /**
      * @brief Start the competition
@@ -141,7 +153,7 @@ public:
     /**
      * @brief Send the floor robot to the home configuration
      */
-    void go_home_();
+    bool go_home_();
     //-----------------------------//
 
     //-----------------------------//
@@ -320,6 +332,8 @@ private:
     std::unique_ptr<tf2_ros::Buffer> tf_buffer = std::make_unique<tf2_ros::Buffer>(get_clock());
     //! TF2 listener
     std::shared_ptr<tf2_ros::TransformListener> tf_listener = std::make_shared<tf2_ros::TransformListener>(*tf_buffer);
+    //! Subscriber for "/moveit_demo/floor_robot/go_home" topic
+    rclcpp::Subscription<std_msgs::msg::String>::SharedPtr moveit_demo_sub_;
     //! Subscriber for "/ariac/floor_robot_gripper_state" topic
     rclcpp::Subscription<ariac_msgs::msg::VacuumGripperState>::SharedPtr floor_gripper_state_sub_;
     //! Subscriber for "/ariac/orders" topic
@@ -401,6 +415,8 @@ private:
     bool left_bins_camera_received_data = false;
     //! Whether "right_bins_camera" has received data or not
     bool right_bins_camera_received_data = false;
+    //! Callback for "/moveit_demo/demo" topic
+    void floor_robot_sub_cb(const std_msgs::msg::String::ConstSharedPtr msg);
     //! Callback for "/ariac/orders" topic
     void orders_cb(const ariac_msgs::msg::Order::ConstSharedPtr msg);
     //! Callback for "/ariac/sensors/kts1_camera/image" topic
@@ -423,6 +439,8 @@ private:
     void agv3_status_cb(const ariac_msgs::msg::AGVStatus::ConstSharedPtr msg);
     //! Callback for "/ariac/agv4_status" topic
     void agv4_status_cb(const ariac_msgs::msg::AGVStatus::ConstSharedPtr msg);
+    //! Service "/moveit_demo/floor_robot/go_home" to move the floor robot to home pose
+    rclcpp::Service<std_srvs::srv::Trigger>::SharedPtr floor_robot_go_home_srv_{nullptr};
     //! Client for "/ariac/perform_quality_check" service
     rclcpp::Client<ariac_msgs::srv::PerformQualityCheck>::SharedPtr quality_checker_;
     //! Client for "/ariac/floor_robot_change_gripper" service

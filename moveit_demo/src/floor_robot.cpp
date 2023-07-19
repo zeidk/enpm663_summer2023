@@ -9,7 +9,7 @@ FloorRobot::FloorRobot()
 
     // parameter to run different demo configurations
     // possible configurations: "full", "service", "publisher"
-    this->declare_parameter("demo", "full");
+    this->declare_parameter("demo", "python_cpp");
     // rclcpp::Parameter demo_param;
     // this->get_parameter("demo", demo_param);
 
@@ -21,6 +21,16 @@ FloorRobot::FloorRobot()
     rclcpp::SubscriptionOptions options;
     subscription_cbg_ = create_callback_group(rclcpp::CallbackGroupType::MutuallyExclusive);
     options.callback_group = subscription_cbg_;
+
+    // subscriber callback to /moveit_demo/floor_robot/go_home topic
+    moveit_demo_sub_ = this->create_subscription<std_msgs::msg::String>(
+        "/moveit_demo/floor_robot/go_home", 10,
+        std::bind(&FloorRobot::floor_robot_sub_cb, this, std::placeholders::_1), options);
+
+    // service callback to /moveit_demo/floor_robot/go_home service
+    floor_robot_go_home_srv_ = create_service<std_srvs::srv::Trigger>(
+        "/moveit_demo/floor_robot/go_home",
+        std::bind(&FloorRobot::go_home_service_cb, this, std::placeholders::_1, std::placeholders::_2));
 
     // subscription to /ariac/orders
     orders_sub_ = this->create_subscription<ariac_msgs::msg::Order>("/ariac/orders", 1,
@@ -87,14 +97,30 @@ FloorRobot::FloorRobot()
 
     RCLCPP_INFO(this->get_logger(), "Initialization successful.");
     RCLCPP_INFO(this->get_logger(), "Waiting for Orders.");
-    // complete_orders_();
-    // RCLCPP_INFO(this->get_logger(), "Oders completed.");
 }
 
 //=============================================//
 FloorRobot::~FloorRobot()
 {
     floor_robot_.~MoveGroupInterface();
+}
+
+//=============================================//
+void FloorRobot::go_home_service_cb(
+    std_srvs::srv::Trigger::Request::SharedPtr req,
+    std_srvs::srv::Trigger::Response::SharedPtr res)
+{
+    (void)req; // remove unused parameter warning
+
+    if (go_home_())
+    {
+        res->success = true;
+    }
+    else
+    {
+        res->success = false;
+        res->message = "Unable to go home";
+    }
 }
 
 //=============================================//
@@ -204,6 +230,23 @@ void FloorRobot::orders_cb(
     const ariac_msgs::msg::Order::ConstSharedPtr msg)
 {
     orders_.push_back(*msg);
+}
+
+//=============================================//
+void FloorRobot::floor_robot_sub_cb(
+    const std_msgs::msg::String::ConstSharedPtr msg)
+{
+    if (msg->data == "go_home")
+    {
+        if (go_home_())
+        {
+            RCLCPP_INFO(get_logger(), "Going home");
+        }
+        else
+        {
+            RCLCPP_ERROR(get_logger(), "Unable to go home");
+        }
+    }
 }
 
 //=============================================//
@@ -504,11 +547,11 @@ void FloorRobot::wait_for_attach_completion_(double timeout)
 }
 
 //=============================================//
-void FloorRobot::go_home_()
+bool FloorRobot::go_home_()
 {
     // Move floor robot to home joint state
     floor_robot_.setNamedTarget("home");
-    move_to_target_();
+    return move_to_target_();
 }
 
 //=============================================//

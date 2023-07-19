@@ -1,6 +1,4 @@
-'''
-_summary_
-'''
+#! /usr/bin/env python3
 
 import rclpy
 from moveit_demo.floor_robot_commander import FloorRobotCommander

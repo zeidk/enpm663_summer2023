@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
     executor.add_node(floor_robot_node);
 
     // if demo is "full"
-    if (demo_param.as_string() == "full")
+    if (demo_param.as_string() == "cpp")
     {
         std::thread([&executor]()
                     { executor.spin(); })
@@ -28,6 +28,9 @@ int main(int argc, char *argv[])
         floor_robot_node->complete_orders_();
         // end the competition
         floor_robot_node->end_competition_();
+    }
+    else{
+        executor.spin();
     }
 
     rclcpp::shutdown();

@@ -35,6 +35,8 @@ def load_yaml(package_name, file_path):
 
 
 def launch_setup(context, *args, **kwargs):
+    demo_type = LaunchConfiguration('demo').perform(context)
+    
     robot_description_content = Command(
         [
             PathJoinSubstitution([FindExecutable(name="xacro")]),
@@ -62,6 +64,7 @@ def launch_setup(context, *args, **kwargs):
             robot_description_semantic,
             robot_description_kinematics,
             {"use_sim_time": True},
+            {"demo": demo_type},
         ],
     )
 
@@ -99,6 +102,10 @@ def generate_launch_description():
 
     declared_arguments.append(
         DeclareLaunchArgument("rviz", default_value="false", description="start rviz node?")
+    )
+    
+    declared_arguments.append(
+        DeclareLaunchArgument("demo", default_value="python_cpp", description="used to select demo type")
     )
 
     return LaunchDescription(declared_arguments + [OpaqueFunction(function=launch_setup)])

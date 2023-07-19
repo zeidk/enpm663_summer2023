@@ -57,10 +57,10 @@ ament_python_install_package(${PROJECT_NAME})
 #-----------------------------
 
 # Install Python executables
-# install(PROGRAMS
-#   nodes/frame_demo_exe.py
-#   DESTINATION lib/${PROJECT_NAME}
-# )
+install(PROGRAMS
+  nodes/commander_main.py
+  DESTINATION lib/${PROJECT_NAME}
+)
 
 install(TARGETS
 moveit_demo_exe
