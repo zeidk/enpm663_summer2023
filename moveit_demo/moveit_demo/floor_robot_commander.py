@@ -22,4 +22,4 @@ class FloorRobotCommander(Node):
     ## @param node_name (string): ROS2 node name
     def __init__(self, node_name):
         super().__init__(node_name)
-        self.get_logger().info(f'{node_name} node running')
+        self.get_logger().info(f'{node_name} node initialized')

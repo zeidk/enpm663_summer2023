@@ -1,5 +1,5 @@
 <map id="FloorRobot::pick_and_place_tray_" name="FloorRobot::pick_and_place_tray_">
 <area shape="rect" id="node1" title="Pick a tray from the kit tray station and place it on the AGV." alt="" coords="427,5,585,47"/>
-<area shape="rect" id="node2" href="$class_floor_robot.html#a2733899f01e1a35dd0779254244f8509" title="Complete a kitting task." alt="" coords="216,5,379,47"/>
+<area shape="rect" id="node2" href="$class_floor_robot.html#a2733899f01e1a35dd0779254244f8509" title="Complete a single kitting task." alt="" coords="216,5,379,47"/>
 <area shape="rect" id="node3" href="$class_floor_robot.html#acffec94a77b0aa2759b6c5ea849edfc0" title="Complete all the announced orders." alt="" coords="5,5,168,47"/>
 </map>

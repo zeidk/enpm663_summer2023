@@ -1,0 +1,7 @@
+<map id="Utils::get_yaw_from_pose_" name="Utils::get_yaw_from_pose_">
+<area shape="rect" id="node1" title="Get the yaw from pose object." alt="" coords="633,39,787,80"/>
+<area shape="rect" id="node2" href="$class_floor_robot.html#a3bc41e80701582b2956fa68bd1862cc4" title="Pick a tray from the kit tray station and place it on the AGV." alt="" coords="427,5,585,47"/>
+<area shape="rect" id="node5" href="$class_floor_robot.html#a39d336dc70d1e0955474cb7445f36afd" title="Pick a part from the bin." alt="" coords="429,71,583,112"/>
+<area shape="rect" id="node3" href="$class_floor_robot.html#a2733899f01e1a35dd0779254244f8509" title="Complete a single kitting task." alt="" coords="216,39,379,80"/>
+<area shape="rect" id="node4" href="$class_floor_robot.html#acffec94a77b0aa2759b6c5ea849edfc0" title="Complete all the announced orders." alt="" coords="5,39,168,80"/>
+</map>

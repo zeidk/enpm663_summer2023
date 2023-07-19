@@ -1,9 +1,14 @@
 var searchData=
 [
-  ['left_5fbins_5fcamera_5fcb_39',['left_bins_camera_cb',['../class_floor_robot.html#ac8604b31c61eab4b914767ac42f97dcc',1,'FloorRobot']]],
-  ['left_5fbins_5fcamera_5fpose_5f_40',['left_bins_camera_pose_',['../class_floor_robot.html#a47ff04afaa1c1b3f87a9ee366d8037f0',1,'FloorRobot']]],
-  ['left_5fbins_5fcamera_5freceived_5fdata_41',['left_bins_camera_received_data',['../class_floor_robot.html#a4b4e0c57c3bf6973817c516798aacf85',1,'FloorRobot']]],
-  ['left_5fbins_5fcamera_5fsub_5f_42',['left_bins_camera_sub_',['../class_floor_robot.html#aa90f0f4c909ddb7451a509c259211ec7',1,'FloorRobot']]],
-  ['left_5fbins_5fparts_5f_43',['left_bins_parts_',['../class_floor_robot.html#a4cd5f62c0d53e51968d37f5bf36dd789',1,'FloorRobot']]],
-  ['log_5fpose_5fto_5fconsole_44',['log_pose_to_console',['../class_utils.html#ab2f68b64225095787c5f63a516aa5881',1,'Utils']]]
+  ['kit_5ftray_5fthickness_5f_39',['kit_tray_thickness_',['../class_floor_robot.html#aa6aad7287b84fc64db673f2021a831de',1,'FloorRobot']]],
+  ['kts1_5fcamera_5fcb_40',['kts1_camera_cb',['../class_floor_robot.html#a276ebc3030b9137c0bb357a93e360782',1,'FloorRobot']]],
+  ['kts1_5fcamera_5fpose_5f_41',['kts1_camera_pose_',['../class_floor_robot.html#a997f6895c8cde29b68d5470f4b4e4ad5',1,'FloorRobot']]],
+  ['kts1_5fcamera_5freceived_5fdata_42',['kts1_camera_received_data',['../class_floor_robot.html#a5c859e58abb22b5700c728fc4465f983',1,'FloorRobot']]],
+  ['kts1_5fcamera_5fsub_5f_43',['kts1_camera_sub_',['../class_floor_robot.html#a757cadc894042b8dd66118bad2f0faaa',1,'FloorRobot']]],
+  ['kts1_5ftrays_5f_44',['kts1_trays_',['../class_floor_robot.html#adc535a3073515f638eb2a68ba20f2b3f',1,'FloorRobot']]],
+  ['kts2_5fcamera_5fcb_45',['kts2_camera_cb',['../class_floor_robot.html#a466afaedd012e521fdff63f24f74ab43',1,'FloorRobot']]],
+  ['kts2_5fcamera_5fpose_5f_46',['kts2_camera_pose_',['../class_floor_robot.html#a84f300c6c098ea59edbeb1e257a2e21b',1,'FloorRobot']]],
+  ['kts2_5fcamera_5freceived_5fdata_47',['kts2_camera_received_data',['../class_floor_robot.html#a4fba5850f92eb2a50c3ab7cf7c0b03e6',1,'FloorRobot']]],
+  ['kts2_5fcamera_5fsub_5f_48',['kts2_camera_sub_',['../class_floor_robot.html#aab12590de2e372b63be54826452758bf',1,'FloorRobot']]],
+  ['kts2_5ftrays_5f_49',['kts2_trays_',['../class_floor_robot.html#aa443abfd48e3ad6b89d42b5e3bd83d2f',1,'FloorRobot']]]
 ];

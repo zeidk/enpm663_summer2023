@@ -1,8 +1,7 @@
 var searchData=
 [
-  ['part_5fcolors_5f_134',['part_colors_',['../class_floor_robot.html#a44e8242421975319ebcfed124b8f6565',1,'FloorRobot']]],
-  ['part_5fheights_5f_135',['part_heights_',['../class_floor_robot.html#a92d4d104942f98f1f5e122761b4e03a0',1,'FloorRobot']]],
-  ['part_5ftypes_5f_136',['part_types_',['../class_floor_robot.html#af329a8d06b78da70abf36c71aa14f03b',1,'FloorRobot']]],
-  ['pick_5foffset_5f_137',['pick_offset_',['../class_floor_robot.html#a0e32b0c01925bfccc3d75f3a4a2f13b2',1,'FloorRobot']]],
-  ['planning_5fscene_5f_138',['planning_scene_',['../class_floor_robot.html#a56f8ccbcc7de7bef742814cc6505fb65',1,'FloorRobot']]]
+  ['left_5fbins_5fcamera_5fpose_5f_164',['left_bins_camera_pose_',['../class_floor_robot.html#a47ff04afaa1c1b3f87a9ee366d8037f0',1,'FloorRobot']]],
+  ['left_5fbins_5fcamera_5freceived_5fdata_165',['left_bins_camera_received_data',['../class_floor_robot.html#a4b4e0c57c3bf6973817c516798aacf85',1,'FloorRobot']]],
+  ['left_5fbins_5fcamera_5fsub_5f_166',['left_bins_camera_sub_',['../class_floor_robot.html#aa90f0f4c909ddb7451a509c259211ec7',1,'FloorRobot']]],
+  ['left_5fbins_5fparts_5f_167',['left_bins_parts_',['../class_floor_robot.html#a4cd5f62c0d53e51968d37f5bf36dd789',1,'FloorRobot']]]
 ];

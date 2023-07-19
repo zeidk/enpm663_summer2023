@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['wait_5ffor_5fattach_5fcompletion_5f_108',['wait_for_attach_completion_',['../class_floor_robot.html#a50263dd91766390cff4ec813634b5406',1,'FloorRobot']]]
+  ['right_5fbins_5fcamera_5fcb_131',['right_bins_camera_cb',['../class_floor_robot.html#adec2c1f0d480f0a8d9afbaa49aba706f',1,'FloorRobot']]]
 ];

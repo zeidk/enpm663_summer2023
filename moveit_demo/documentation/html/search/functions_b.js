@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['set_5fgripper_5fstate_5f_106',['set_gripper_state_',['../class_floor_robot.html#aaaab7bb20234af726a550957b8ea9f87',1,'FloorRobot']]],
-  ['set_5frobot_5forientation_5f_107',['set_robot_orientation_',['../class_floor_robot.html#a067e072496ebcf80d617b8430cfe2d92',1,'FloorRobot']]]
+  ['pick_5fand_5fplace_5ftray_5f_128',['pick_and_place_tray_',['../class_floor_robot.html#a3bc41e80701582b2956fa68bd1862cc4',1,'FloorRobot']]],
+  ['pick_5fbin_5fpart_5f_129',['pick_bin_part_',['../class_floor_robot.html#a39d336dc70d1e0955474cb7445f36afd',1,'FloorRobot']]],
+  ['place_5fpart_5fin_5ftray_5f_130',['place_part_in_tray_',['../class_floor_robot.html#a064378575fd6cedf1db2d0b428eb2cca',1,'FloorRobot']]]
 ];

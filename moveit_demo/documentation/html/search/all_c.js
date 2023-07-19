@@ -1,9 +1,11 @@
 var searchData=
 [
-  ['rail_5fpositions_5f_60',['rail_positions_',['../class_floor_robot.html#ac89ebb7916ab58b4f9413b880fa392fe',1,'FloorRobot']]],
-  ['right_5fbins_5fcamera_5fcb_61',['right_bins_camera_cb',['../class_floor_robot.html#adec2c1f0d480f0a8d9afbaa49aba706f',1,'FloorRobot']]],
-  ['right_5fbins_5fcamera_5fpose_5f_62',['right_bins_camera_pose_',['../class_floor_robot.html#ac55021ff8b9e0fdbf043183fb3906609',1,'FloorRobot']]],
-  ['right_5fbins_5fcamera_5freceived_5fdata_63',['right_bins_camera_received_data',['../class_floor_robot.html#a31be5362afdccbd5b6cec98491792394',1,'FloorRobot']]],
-  ['right_5fbins_5fcamera_5fsub_5f_64',['right_bins_camera_sub_',['../class_floor_robot.html#af15a01acac5f8cb92f733d0627204080',1,'FloorRobot']]],
-  ['right_5fbins_5fparts_5f_65',['right_bins_parts_',['../class_floor_robot.html#a57d234bd0e705ab6106790116b361381',1,'FloorRobot']]]
+  ['part_5fcolors_5f_66',['part_colors_',['../class_floor_robot.html#a44e8242421975319ebcfed124b8f6565',1,'FloorRobot']]],
+  ['part_5fheights_5f_67',['part_heights_',['../class_floor_robot.html#a92d4d104942f98f1f5e122761b4e03a0',1,'FloorRobot']]],
+  ['part_5ftypes_5f_68',['part_types_',['../class_floor_robot.html#af329a8d06b78da70abf36c71aa14f03b',1,'FloorRobot']]],
+  ['pick_5fand_5fplace_5ftray_5f_69',['pick_and_place_tray_',['../class_floor_robot.html#a3bc41e80701582b2956fa68bd1862cc4',1,'FloorRobot']]],
+  ['pick_5fbin_5fpart_5f_70',['pick_bin_part_',['../class_floor_robot.html#a39d336dc70d1e0955474cb7445f36afd',1,'FloorRobot']]],
+  ['pick_5foffset_5f_71',['pick_offset_',['../class_floor_robot.html#a0e32b0c01925bfccc3d75f3a4a2f13b2',1,'FloorRobot']]],
+  ['place_5fpart_5fin_5ftray_5f_72',['place_part_in_tray_',['../class_floor_robot.html#a064378575fd6cedf1db2d0b428eb2cca',1,'FloorRobot']]],
+  ['planning_5fscene_5f_73',['planning_scene_',['../class_floor_robot.html#a56f8ccbcc7de7bef742814cc6505fb65',1,'FloorRobot']]]
 ];

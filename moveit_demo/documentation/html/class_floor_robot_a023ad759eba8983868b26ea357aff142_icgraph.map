@@ -1,0 +1,5 @@
+<map id="FloorRobot::move_agv_" name="FloorRobot::move_agv_">
+<area shape="rect" id="node1" title="Move an AGV to a location." alt="" coords="427,13,603,39"/>
+<area shape="rect" id="node2" href="$class_floor_robot.html#a2733899f01e1a35dd0779254244f8509" title="Complete a single kitting task." alt="" coords="216,5,379,47"/>
+<area shape="rect" id="node3" href="$class_floor_robot.html#acffec94a77b0aa2759b6c5ea849edfc0" title="Complete all the announced orders." alt="" coords="5,5,168,47"/>
+</map>

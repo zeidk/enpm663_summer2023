@@ -6,6 +6,13 @@ FloorRobot::FloorRobot()
       floor_robot_(std::shared_ptr<rclcpp::Node>(std::move(this)), "floor_robot"),
       planning_scene_()
 {
+
+    // parameter to run different demo configurations
+    // possible configurations: "full", "service", "publisher"
+    this->declare_parameter("demo", "full");
+    // rclcpp::Parameter demo_param;
+    // this->get_parameter("demo", demo_param);
+
     // use upper joint velocity and acceleration limits
     floor_robot_.setMaxAccelerationScalingFactor(1.0);
     floor_robot_.setMaxVelocityScalingFactor(1.0);

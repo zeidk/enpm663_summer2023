@@ -1,4 +1,4 @@
 <map id="FloorRobot::complete_kitting_task_" name="FloorRobot::complete_kitting_task_">
-<area shape="rect" id="node1" title="Complete a kitting task." alt="" coords="216,5,379,47"/>
+<area shape="rect" id="node1" title="Complete a single kitting task." alt="" coords="216,5,379,47"/>
 <area shape="rect" id="node2" href="$class_floor_robot.html#acffec94a77b0aa2759b6c5ea849edfc0" title="Complete all the announced orders." alt="" coords="5,5,168,47"/>
 </map>
