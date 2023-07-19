@@ -1,0 +1,4 @@
+<map id="FloorRobot::go_home_service_cb" name="FloorRobot::go_home_service_cb">
+<area shape="rect" id="node1" title="Callback for &quot;/moveit_demo/floor_robot/go_home&quot; service." alt="" coords="225,5,387,47"/>
+<area shape="rect" id="node2" href="$class_floor_robot.html#a9f59d5385824b89d7fc9a60bbe345283" title="Construct a new FloorRobot object." alt="" coords="5,13,177,39"/>
+</map>

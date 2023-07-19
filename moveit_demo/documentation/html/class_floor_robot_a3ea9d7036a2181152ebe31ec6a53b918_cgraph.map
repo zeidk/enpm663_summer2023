@@ -1,0 +1,5 @@
+<map id="FloorRobot::go_home_service_cb" name="FloorRobot::go_home_service_cb">
+<area shape="rect" id="node1" title="Callback for &quot;/moveit_demo/floor_robot/go_home&quot; service." alt="" coords="5,5,167,47"/>
+<area shape="rect" id="node2" href="$class_floor_robot.html#aad160b5bc494fbd367520908aa5e3508" title="Send the floor robot to the home configuration." alt="" coords="215,13,383,39"/>
+<area shape="rect" id="node3" href="$class_floor_robot.html#ad107b58ed50f02a9e70545734e30a04a" title="Move the floor robot to the target pose." alt="" coords="431,5,589,47"/>
+</map>

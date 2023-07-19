@@ -1,6 +1,6 @@
 <map id="FloorRobot::complete_kitting_task_" name="FloorRobot::complete_kitting_task_">
 <area shape="rect" id="node1" title="Complete a single kitting task." alt="" coords="5,477,168,518"/>
-<area shape="rect" id="node2" href="$class_floor_robot.html#a914676249d4a1dc65a8682b4c91bf12e" title="Send the floor robot to the home configuration." alt="" coords="220,656,388,683"/>
+<area shape="rect" id="node2" href="$class_floor_robot.html#aad160b5bc494fbd367520908aa5e3508" title="Send the floor robot to the home configuration." alt="" coords="220,656,388,683"/>
 <area shape="rect" id="node4" href="$class_floor_robot.html#a023ad759eba8983868b26ea357aff142" title="Move an AGV to a location." alt="" coords="216,426,392,452"/>
 <area shape="rect" id="node5" href="$class_floor_robot.html#a3bc41e80701582b2956fa68bd1862cc4" title="Pick a tray from the kit tray station and place it on the AGV." alt="" coords="225,477,383,518"/>
 <area shape="rect" id="node16" href="$class_floor_robot.html#a39d336dc70d1e0955474cb7445f36afd" title="Pick a part from the bin." alt="" coords="227,280,381,321"/>
