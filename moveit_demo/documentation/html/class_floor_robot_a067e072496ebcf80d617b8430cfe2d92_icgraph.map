@@ -1,9 +1,0 @@
-<map id="FloorRobot::set_robot_orientation_" name="FloorRobot::set_robot_orientation_">
-<area shape="rect" id="node1" title="Set the orientation for the end effector of the robot." alt="" coords="851,56,1013,98"/>
-<area shape="rect" id="node2" href="$class_floor_robot.html#ad50b67bfa4b8e91e2ea8a57ad70d854e" title="Change the gripper on the floor robot." alt="" coords="644,27,792,68"/>
-<area shape="rect" id="node3" href="$class_floor_robot.html#a3bc41e80701582b2956fa68bd1862cc4" title="Pick a tray from the kit tray station and place it on the AGV." alt="" coords="427,20,585,62"/>
-<area shape="rect" id="node6" href="$class_floor_robot.html#a39d336dc70d1e0955474cb7445f36afd" title="Pick a part from the bin." alt="" coords="429,86,583,127"/>
-<area shape="rect" id="node7" href="$class_floor_robot.html#a064378575fd6cedf1db2d0b428eb2cca" title="Place a part in a quadrant in the tray." alt="" coords="633,144,803,186"/>
-<area shape="rect" id="node4" href="$class_floor_robot.html#a2733899f01e1a35dd0779254244f8509" title="Complete a single kitting task." alt="" coords="216,86,379,127"/>
-<area shape="rect" id="node5" href="$class_floor_robot.html#acffec94a77b0aa2759b6c5ea849edfc0" title="Complete all the announced orders." alt="" coords="5,86,168,127"/>
-</map>

@@ -1,5 +1,0 @@
-<map id="FloorRobot::add_models_to_planning_scene_" name="FloorRobot::add_models_to_planning_scene_">
-<area shape="rect" id="node1" title="Add static models to the planning scene." alt="" coords="5,39,185,80"/>
-<area shape="rect" id="node2" href="$class_floor_robot.html#a6fb6650718cddfa05d055531f757f7a5" title="Add a single model to the planning scene." alt="" coords="233,5,439,47"/>
-<area shape="rect" id="node3" href="$class_utils.html#a150d77055a3a8f27b665b3ae5fda0a56" title="Get the quaternion from euler object." alt="" coords="257,71,415,112"/>
-</map>
