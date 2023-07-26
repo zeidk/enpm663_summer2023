@@ -20,7 +20,7 @@ from launch_ros.actions import Node
 def generate_launch_description():
     return LaunchDescription([
         LifecycleNode(package='lifecycle_demo', executable='lifecycle_talker',
-                      name='lc_talker', output='screen'),
-        Node(package='lifecycle', executable='lifecycle_listener', output='screen'),
-        Node(package='lifecycle', executable='lifecycle_service_client', output='screen')
+                      name='talker', namespace='', output='screen'),
+        Node(package='lifecycle_demo', executable='lifecycle_listener', output='screen'),
+        Node(package='lifecycle_demo', executable='lifecycle_service_client', output='screen')
     ])
