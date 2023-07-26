@@ -31,24 +31,24 @@
  *   notifications about state changes of the node
  *   lc_talker
  */
-class LifecycleListener : public rclcpp::Node
+class Listener : public rclcpp::Node
 {
 public:
-    explicit LifecycleListener(const std::string &node_name)
+    explicit Listener(const std::string &node_name)
         : Node(node_name)
     {
         // Data topic from the lc_talker node
         sub_data_ = this->create_subscription<std_msgs::msg::String>(
             "lifecycle_chatter", 10,
-            std::bind(&LifecycleListener::data_callback, this, std::placeholders::_1));
+            std::bind(&Listener::data_callback, this, std::placeholders::_1));
 
         // Notification event topic. All state changes
         // are published here as TransitionEvents with
         // a start and goal state indicating the transition
         sub_notification_ = this->create_subscription<lifecycle_msgs::msg::TransitionEvent>(
-            "/lc_talker/transition_event",
+            "/talker/transition_event",
             10,
-            std::bind(&LifecycleListener::notification_callback, this, std::placeholders::_1));
+            std::bind(&Listener::notification_callback, this, std::placeholders::_1));
     }
 
     void data_callback(const std_msgs::msg::String::SharedPtr msg)
@@ -77,10 +77,8 @@ int main(int argc, char **argv)
     setvbuf(stdout, NULL, _IONBF, BUFSIZ);
 
     rclcpp::init(argc, argv);
-
-    auto lc_listener = std::make_shared<LifecycleListener>("lc_listener");
+    auto lc_listener = std::make_shared<Listener>("listener");
     rclcpp::spin(lc_listener);
-
     rclcpp::shutdown();
 
     return 0;

@@ -47,15 +47,15 @@ using namespace std::chrono_literals;
  * created:
  * - <node_name>__transition_event
  */
-class LifecycleTalker : public rclcpp_lifecycle::LifecycleNode
+class Talker : public rclcpp_lifecycle::LifecycleNode
 {
 public:
-    /// LifecycleTalker constructor
+    /// Talker constructor
     /**
      * The lifecycletalker/lifecyclenode constructor has the same
      * arguments a regular node.
      */
-    explicit LifecycleTalker(const std::string &node_name, bool intra_process_comms = false)
+    explicit Talker(const std::string &node_name, bool intra_process_comms = false)
         : rclcpp_lifecycle::LifecycleNode(node_name,
                                           rclcpp::NodeOptions().use_intra_process_comms(intra_process_comms))
     {
@@ -119,7 +119,7 @@ public:
         // available.
         pub_ = this->create_publisher<std_msgs::msg::String>("lifecycle_chatter", 10);
         timer_ = this->create_wall_timer(
-            1s, std::bind(&LifecycleTalker::publish, this));
+            1s, std::bind(&Talker::publish, this));
 
         RCLCPP_INFO(get_logger(), "on_configure() is called.");
 
@@ -290,16 +290,11 @@ int main(int argc, char *argv[])
     setvbuf(stdout, NULL, _IONBF, BUFSIZ);
 
     rclcpp::init(argc, argv);
-
     rclcpp::executors::SingleThreadedExecutor exe;
-
-    std::shared_ptr<LifecycleTalker> lc_node =
-        std::make_shared<LifecycleTalker>("lc_talker");
-
+    std::shared_ptr<Talker> lc_node =
+        std::make_shared<Talker>("talker");
     exe.add_node(lc_node->get_node_base_interface());
-
     exe.spin();
-
     rclcpp::shutdown();
 
     return 0;

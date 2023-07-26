@@ -29,7 +29,7 @@
 using namespace std::chrono_literals;
 
 // which node to handle
-static constexpr char const *lifecycle_node = "lc_talker";
+static constexpr char const *lifecycle_node = "talker";
 
 // Every lifecycle node has various services
 // attached to it. By convention, we use the format of
@@ -38,8 +38,8 @@ static constexpr char const *lifecycle_node = "lc_talker";
 // and thus the two service topics are:
 // lc_talker/get_state
 // lc_talker/change_state
-static constexpr char const *node_get_state_topic = "lc_talker/get_state";
-static constexpr char const *node_change_state_topic = "lc_talker/change_state";
+static constexpr char const *node_get_state_topic = "talker/get_state";
+static constexpr char const *node_change_state_topic = "talker/change_state";
 
 template <typename FutureT, typename WaitTimeT>
 std::future_status
