@@ -14,10 +14,14 @@
     )
 
     (:init
-        (=(competition-started) 0)
-        (=(competition-ended) 0)
-        (=(current-num-parts-in-kit) 0)
-        (=(expected-num-parts-in-kit) 2)
+        (non-competition-started)
+        (non-competition-ended)
+        (non-submitted-order)
+        (= (current-num-parts-in-kit) 0)
+        (= (expected-num-parts-in-kit) 2)
+        (agv-at-kitting-station agv1)
+        (agv-at-kitting-station agv2)
+
         (has-part-type-color part1 BLUEBATTERY)
         (has-part-type-color part2 BLUEBATTERY)
         (has-part-type-color part3 BLUEBATTERY)
@@ -38,8 +42,7 @@
             (on-agv tray1 agv1)
             (part-in-tray BLUEBATTERY TRAYID1 QUADRANT1)
             (part-in-tray BLUEBATTERY TRAYID1 QUADRANT2)
-            (=(competition-ended) 1)
-
+            (submitted-order)
         )
     )
 )

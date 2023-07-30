@@ -5,8 +5,6 @@
     )
 
     (:functions
-        (competition-started)
-        (competition-ended)
         (current-num-parts-in-kit)
         (expected-num-parts-in-kit)
     )
@@ -24,6 +22,14 @@
         (gripper-empty)
         (has-part-type-color ?x - part ?y - part-type-color)
         (has-tray-id ?x - tray ?y - tray-id)
+        (non-competition-ended)
+        (competition-ended)
+        (non-competition-started)
+        (competition-started)
+        (non-submitted-order)
+        (submitted-order)
+        (agv-at-kitting-station ?x - agv)
+        (agv-at-warehouse ?x - agv)
     )
 
     (:durative-action PickupTray
@@ -47,6 +53,7 @@
         :duration (= ?duration 15)
         :condition (and
             (at start (holding-tray ?tray))
+            (over all (agv-at-kitting-station ?agv))
         )
         :effect (and
             (at start (not (holding-tray ?tray)))
@@ -60,7 +67,7 @@
         :parameters ()
         :duration (= ?duration 5)
         :condition (and
-            (at start (= (competition-started) 1))
+            (at start (competition-started))
             (at start (part-gripper-mounted))
             (at start (gripper-empty))
         )
@@ -105,9 +112,10 @@
         :duration (= ?duration 15)
         :condition (and
             (at start (holding-part ?part))
-            (at start (tray-on-agv ?tray))
+            (over all (tray-on-agv ?tray))
             (over all (has-part-type-color ?part ?part_type_color))
-            (at start (has-tray-id ?tray ?tray_id))
+            (over all (has-tray-id ?tray ?tray_id))
+            (over all (< (current-num-parts-in-kit) (expected-num-parts-in-kit)))
         )
         :effect (and
             (at start (not (holding-part ?part)))
@@ -121,10 +129,11 @@
         :parameters ()
         :duration (= ?duration 2)
         :condition (and
-            (at start (= (competition-started) 0))
+            (at start (non-competition-started))
         )
         :effect (and
-            (at end (increase (competition-started) 1))
+            (at start (not (non-competition-started)))
+            (at end (competition-started))
         )
     )
 
@@ -132,11 +141,39 @@
         :parameters ()
         :duration (= ?duration 2)
         :condition (and
-            (at start (= (competition-ended) 0))
-            (over all (= (current-num-parts-in-kit) (expected-num-parts-in-kit)))
+            (at start (non-competition-ended))
+            (over all (submitted-order))
         )
         :effect (and
-            (at end (increase (competition-ended) 1))
+            (at start (not (non-competition-ended)))
+            (at end (competition-ended))
+        )
+    )
+
+    (:durative-action MoveToWarehouse
+        :parameters (?agv - agv)
+        :duration (= ?duration 20)
+        :condition (and
+            (at start (agv-at-kitting-station ?agv))
+            (over all (= (current-num-parts-in-kit) 2))
+        )
+        :effect (and
+            (at start (not (agv-at-kitting-station ?agv)))
+            (at end (agv-at-warehouse ?agv))
+        )
+    )
+
+
+    (:durative-action SubmitKit
+        :parameters (?agv - agv)
+        :duration (= ?duration 20)
+        :condition (and
+            (over all (agv-at-warehouse ?agv))
+            (at start (non-submitted-order))
+        )
+        :effect (and
+            (at start (not (non-submitted-order)))
+            (at end (submitted-order))
         )
     )
 
