@@ -27,6 +27,7 @@ set(MOVEIT_DEMO_INCLUDE_DEPENDS
   moveit_msgs
   geometric_shapes
   moveit_ros_planning_interface
+  robot_commander_msgs
 )
 
 # find all dependencies
@@ -44,7 +45,6 @@ ament_target_dependencies(moveit_demo_exe ${MOVEIT_DEMO_INCLUDE_DEPENDS})
 install(TARGETS moveit_demo_exe
   RUNTIME DESTINATION lib/${PROJECT_NAME}
 )
-
 
 #-----------------------------
 # Python

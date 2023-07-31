@@ -47,6 +47,11 @@
 #include <ariac_msgs/srv/vacuum_gripper_control.hpp>
 #include <ariac_msgs/srv/perform_quality_check.hpp>
 #include <ariac_msgs/srv/submit_order.hpp>
+#include <robot_commander_msgs/srv/enter_tool_changer.hpp>
+#include <robot_commander_msgs/srv/exit_tool_changer.hpp>
+#include <robot_commander_msgs/srv/move_robot_to_table.hpp>
+#include <robot_commander_msgs/srv/move_robot_to_tray.hpp>
+#include <robot_commander_msgs/srv/move_tray_to_agv.hpp>
 #include <std_srvs/srv/trigger.hpp>
 #include <ariac_msgs/srv/move_agv.hpp>
 #include <std_msgs/msg/bool.hpp>
@@ -92,16 +97,6 @@ public:
      */
     ~FloorRobot();
     //-----------------------------//
-
-    /**
-     * @brief Callback for "/moveit_demo/floor_robot/go_home" service
-     *
-     * @param req Request for the service
-     * @param res Response for the service
-     */
-    void go_home_service_cb(
-        std_srvs::srv::Trigger::Request::SharedPtr req,
-        std_srvs::srv::Trigger::Response::SharedPtr res);
 
     /**
      * @brief Start the competition
@@ -160,6 +155,144 @@ public:
     // Private attributes and methods
     //-----------------------------//
 private:
+    //=========== START PYTHON - C++ ===========//
+    /*
+    The following snippets of code are used to send commands to the floor robot from Python.
+    The idea is to implement the CCS in Python (read orders, find parts, find trays, etc.) and then send commands to the floor robot to do motion planning.
+    */
+
+    rclcpp::Node::SharedPtr node_;
+    rclcpp::Executor::SharedPtr executor_;
+    std::thread executor_thread_;
+
+    //! Service to move the robot to its home pose
+    rclcpp::Service<std_srvs::srv::Trigger>::SharedPtr move_robot_home_srv_;
+    //! Service to move the robot to a table
+    rclcpp::Service<robot_commander_msgs::srv::MoveRobotToTable>::SharedPtr move_robot_to_table_srv_;
+    //! Service to move the robot very close to a tray (just before it is grasped)
+    rclcpp::Service<robot_commander_msgs::srv::MoveRobotToTray>::SharedPtr move_robot_to_tray_srv_;
+    //! Service to move the robot to an AGV after picking a tray
+    rclcpp::Service<robot_commander_msgs::srv::MoveTrayToAGV>::SharedPtr move_tray_to_agv_srv_;
+    //! Service to move the end effector inside a tool changer
+    rclcpp::Service<robot_commander_msgs::srv::EnterToolChanger>::SharedPtr enter_tool_changer_srv_;
+    //! Service to move the end effector outside a tool changer
+    rclcpp::Service<robot_commander_msgs::srv::ExitToolChanger>::SharedPtr exit_tool_changer_srv_;
+
+    /**
+     * @brief Callback function for the service /commander/move_robot_home
+     *
+     * @param req_ Shared pointer to std_srvs::srv::Trigger::Request
+     * @param res_ Shared pointer to std_srvs::srv::Trigger::Response
+     */
+    void move_robot_home_srv_cb_(
+        std_srvs::srv::Trigger::Request::SharedPtr req_,
+        std_srvs::srv::Trigger::Response::SharedPtr res_);
+    /**
+     * @brief Callback function for the service /commander/move_robot_to_table
+     *
+     * @param req_ Shared pointer to robot_commander_msgs::srv::MoveToTable::Request
+     * @param res_ Shared pointer to robot_commander_msgs::srv::MoveToTable::Response
+     */
+    void
+    move_robot_to_table_srv_cb_(
+        robot_commander_msgs::srv::MoveRobotToTable::Request::SharedPtr req_, robot_commander_msgs::srv::MoveRobotToTable::Response::SharedPtr res_);
+
+    /**
+     * @brief Callback function for the service /commander/move_robot_to_tray
+     *
+     * @param req_ Shared pointer to robot_commander_msgs::srv::MoveToTray::Request
+     * @param res_ Shared pointer to robot_commander_msgs::srv::MoveToTray::Response
+     */
+    void
+    move_robot_to_tray_srv_cb_(
+        robot_commander_msgs::srv::MoveRobotToTray::Request::SharedPtr req_, robot_commander_msgs::srv::MoveRobotToTray::Response::SharedPtr res_);
+    /**
+     * @brief Callback function for the service /competitor/floor_robot/move_tray_to_agv
+     *
+     * @param req_ Shared pointer to robot_commander_msgs::srv::MoveTrayToAGV::Request
+     * @param res_ Shared pointer to robot_commander_msgs::srv::MoveTrayToAGV::Response
+     */
+    void
+    move_tray_to_agv_srv_cb_(
+        robot_commander_msgs::srv::MoveTrayToAGV::Request::SharedPtr req_, robot_commander_msgs::srv::MoveTrayToAGV::Response::SharedPtr res_);
+
+    /**
+     * @brief  Callback function for the service /commander/enter_tool_changer
+     *
+     * @param req_ Shared pointer to robot_commander_msgs::srv::InToolChanger::Request
+     * @param res_ Shared pointer to robot_commander_msgs::srv::InToolChanger::Response
+     */
+    void
+    enter_tool_changer_srv_cb_(
+        robot_commander_msgs::srv::EnterToolChanger::Request::SharedPtr req_, robot_commander_msgs::srv::EnterToolChanger::Response::SharedPtr res_);
+
+    /**
+     * @brief Callback function for the service /commander/exit_tool_changer
+     *
+     * @param req_ Shared pointer to robot_commander_msgs::srv::OutToolChanger::Request
+     * @param res_ Shared pointer to robot_commander_msgs::srv::OutToolChanger::Response
+     */
+    void
+    exit_tool_changer_srv_cb_(
+        robot_commander_msgs::srv::ExitToolChanger::Request::SharedPtr req_, robot_commander_msgs::srv::ExitToolChanger::Response::SharedPtr res_);
+
+    /**
+     * @brief Provide motion to the floor robot to move its base to one of the two tables.
+     *
+     * This method is called from FloorRobot::move_tray_to_agv_srv_cb
+     * @param kts Either 1 or 2
+     */
+    bool move_robot_to_table_(int kts);
+
+    /**
+     * @brief Provide motion to the floor robot to move the attached tray above an AGV.
+     *
+     * @param agv_number
+     * @return true  Motion successful
+     * @return false  Motion failed
+     */
+    bool move_tray_to_agv(int agv_number);
+
+    /**
+     * @brief Provide motion to the floor robot to move the end effector just above a tray.
+     *
+     * @param tray_id ID of the tray to pick up
+     * @param tray_pose Pose of the tray to pick up
+     * @return true Motion successful
+     * @return false Motion failed
+     */
+    bool move_robot_to_tray_(int tray_id, const geometry_msgs::msg::Pose &tray_pose);
+
+    /**
+     * @brief  Move the robot to its home pose
+     *
+     * @return true Motion successful
+     * @return false Motion failed
+     */
+    bool move_robot_home_();
+
+    /**
+     * @brief Move the end effector inside a tool changer
+     *
+     * @param changing_station Name of the changing station
+     * @param gripper_type Type of the gripper to change to
+     * @return true Motion successful
+     * @return false Motion failed
+     */
+    bool enter_tool_changer_(std::string changing_station, std::string gripper_type);
+
+    /**
+     * @brief Move the end effector outside a tool changer
+     *
+     * @param changing_station Name of the changing station
+     * @param gripper_type Type of the gripper to change to
+     * @return true Motion successful
+     * @return false Motion failed
+     */
+    bool exit_tool_changer_(std::string changing_station, std::string gripper_type);
+
+    //=========== END PYTHON - C++ ===========//
+
     /**
      * @brief Complete a single kitting task
      *
@@ -320,7 +453,7 @@ private:
     //! List of received orders
     std::vector<ariac_msgs::msg::Order> orders_;
     //! Move group interface for the floor robot
-    moveit::planning_interface::MoveGroupInterface floor_robot_;
+    moveit::planning_interface::MoveGroupInterfacePtr floor_robot_;
     //! Planning scene interface for the workcell
     moveit::planning_interface::PlanningSceneInterface planning_scene_;
     //! Trajectory processing for the floor robot
@@ -407,6 +540,8 @@ private:
     std::vector<ariac_msgs::msg::PartPose> right_bins_parts_;
     //! Callback group for the subscriptions
     rclcpp::CallbackGroup::SharedPtr subscription_cbg_;
+    //! Specific callback group for the state of the gripper
+    rclcpp::CallbackGroup::SharedPtr gripper_cbg_;
     //! Whether "kts1_camera" has received data or not
     bool kts1_camera_received_data = false;
     //! Whether "kts2_camera" has received data or not
@@ -439,8 +574,7 @@ private:
     void agv3_status_cb(const ariac_msgs::msg::AGVStatus::ConstSharedPtr msg);
     //! Callback for "/ariac/agv4_status" topic
     void agv4_status_cb(const ariac_msgs::msg::AGVStatus::ConstSharedPtr msg);
-    //! Service "/moveit_demo/floor_robot/go_home" to move the floor robot to home pose
-    rclcpp::Service<std_srvs::srv::Trigger>::SharedPtr floor_robot_go_home_srv_{nullptr};
+
     //! Client for "/ariac/perform_quality_check" service
     rclcpp::Client<ariac_msgs::srv::PerformQualityCheck>::SharedPtr quality_checker_;
     //! Client for "/ariac/floor_robot_change_gripper" service
