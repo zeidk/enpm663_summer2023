@@ -44,30 +44,36 @@ class RobotCommanderInterface(Node):
 
         self.set_parameters([sim_time])
 
+        # Callback groups to allow multiple callbacks to be called at the same time
         timer_cb_group = MutuallyExclusiveCallbackGroup()
         subscriber_cb_group = MutuallyExclusiveCallbackGroup()
 
         # Multiple flags to trigger the robot actions
+
+        # The following flags prevent the same action to be called multiple times
+        self._robot_moving_to_home = False
+        self._moving_robot_to_table = False
+        self._entering_tool_changer = False
+        self._changing_gripper = False
+        self._exiting_tool_changer = False
+        self._activating_gripper = False
+        self._deactivating_gripper = False
+        self._moving_robot_to_tray = False
+        self._moving_tray_to_agv = False
+        self._ending_demo = False
+
+        # The following flags are used to trigger the next action
         self._kit_completed = False
         self._competition_started = False
         self._competition_state = None
-        self._robot_moving_to_home = False
         self._robot_moved_to_home = False
-        self._moving_robot_to_table = False
         self._moved_robot_to_table = False
-        self._entering_tool_changer = False
         self._entered_tool_changer = False
-        self._changing_gripper = False
         self._changed_gripper = False
-        self._exiting_tool_changer = False
         self._exited_tool_changer = False
-        self._activating_gripper = False
         self._activated_gripper = False
-        self._deactivating_gripper = False
         self._deactivated_gripper = False
-        self._moving_robot_to_tray = False
         self._moved_robot_to_tray = False
-        self._moving_tray_to_agv = False
         self._moved_tray_to_agv = False
 
         # ---- Subscribers ----
@@ -194,11 +200,10 @@ class RobotCommanderInterface(Node):
         if self._exited_tool_changer:
             if not self._activating_gripper:
                 self._activate_gripper()
-                
+
         # move to tray
         if self._activated_gripper:
             if not self._moving_robot_to_tray:
-                # hard coded tray id and pose
                 # TODO: get the tray id and pose from the vision system
                 tray_id = MoveRobotToTray.Request.TRAY_ID3
                 tray_pose = Pose()
@@ -210,34 +215,31 @@ class RobotCommanderInterface(Node):
                 tray_pose.orientation.z = 1.0
                 tray_pose.orientation.w = 0.0
                 self._move_robot_to_tray(tray_id, tray_pose)
-        
+
         # move tray to agv
-        # TODO: Check whether the tray is picked up by using  
+        # TODO: Check whether the tray is picked up by using
         # a subscriber to /ariac/floor_robot_gripper_state
         if self._moved_robot_to_tray:
             if not self._moving_tray_to_agv:
                 self._move_tray_to_agv(MoveTrayToAGV.Request.AGV3)
-                
+
         # deactivate gripper
         # TODO: Check whether the tray is not attached to the gripper
         if self._moved_tray_to_agv:
             if not self._deactivating_gripper:
                 self._deactivate_gripper()
-        
+
         # move robot home
         if self._moved_tray_to_agv:
             if self._deactivated_gripper:
-                self._move_robot_home()
-                # we are done
-                self._kit_completed = True
-                self.destroy_node()
-                rclpy.shutdown()
+                if not self._ending_demo:
+                    self._move_robot_home(end_demo=True)
 
     def _start_competition(self):
         '''
         Start the competition
-        '''        
-        
+        '''
+
         self.get_logger().info('👉 Starting the competition...')
 
         while not self._start_competition_cli.wait_for_service(timeout_sec=1.0):
@@ -256,18 +258,21 @@ class RobotCommanderInterface(Node):
         '''
         message = future.result().message
         if future.result().success:
-            self.get_logger().info(f'✔️ {message}')
+            self.get_logger().info(f'✅ {message}')
             self._competition_started = True
         else:
-            self.get_logger().fatal(f'❌ {message}')
+            self.get_logger().fatal(f'💀 {message}')
 
-    def _move_robot_home(self):
+    def _move_robot_home(self, end_demo=False):
         '''
         Move the floor robot to its home position
-        '''        
+        '''
 
         self.get_logger().info('👉 Moving robot home...')
-        self._robot_moving_to_home = True
+        if end_demo:
+            self._ending_demo = True
+        else:
+            self._robot_moving_to_home = True
 
         while not self._move_robot_home_cli.wait_for_service(timeout_sec=1.0):
             self.get_logger().info('Service not available, waiting...')
@@ -285,10 +290,10 @@ class RobotCommanderInterface(Node):
         '''
         message = future.result().message
         if future.result().success:
-            self.get_logger().info(f'✔️ {message}')
+            self.get_logger().info(f'✅ {message}')
             self._robot_moved_to_home = True
         else:
-            self.get_logger().fatal(f'❌ {message}')
+            self.get_logger().fatal(f'💀 {message}')
 
     def _move_robot_to_table(self, table_id):
         '''
@@ -297,7 +302,7 @@ class RobotCommanderInterface(Node):
         Args:
             table_id (int): 1 for kts1 and 2 for kts2
         '''
-        
+
         self.get_logger().info('👉 Moving robot to changing station...')
         self._moving_robot_to_table = True
         while not self._move_robot_to_table_cli.wait_for_service(timeout_sec=1.0):
@@ -317,10 +322,10 @@ class RobotCommanderInterface(Node):
         '''
         message = future.result().message
         if future.result().success:
-            self.get_logger().info(f'✔️ {message}')
+            self.get_logger().info(f'✅ {message}')
             self._moved_robot_to_table = True
         else:
-            self.get_logger().fatal(f'❌ {message}')
+            self.get_logger().fatal(f'💀 {message}')
 
     def _enter_tool_changer(self, station, gripper_type):
         '''
@@ -350,10 +355,10 @@ class RobotCommanderInterface(Node):
         '''
         message = future.result().message
         if future.result().success:
-            self.get_logger().info(f'✔️ {message}')
+            self.get_logger().info(f'✅ {message}')
             self._entered_tool_changer = True
         else:
-            self.get_logger().fatal(f'❌ {message}')
+            self.get_logger().fatal(f'💀 {message}')
 
     def _change_gripper(self, gripper_type):
         '''
@@ -382,10 +387,10 @@ class RobotCommanderInterface(Node):
         '''
         message = future.result().message
         if future.result().success:
-            self.get_logger().info('✔️ Gripper changed')
+            self.get_logger().info('✅ Gripper changed')
             self._changed_gripper = True
         else:
-            self.get_logger().fatal(f'❌ {message}')
+            self.get_logger().fatal(f'💀 {message}')
 
     def _exit_tool_changer(self, station, gripper_type):
         '''
@@ -415,10 +420,10 @@ class RobotCommanderInterface(Node):
         '''
         message = future.result().message
         if future.result().success:
-            self.get_logger().info(f'✔️ {message}')
+            self.get_logger().info(f'✅ {message}')
             self._exited_tool_changer = True
         else:
-            self.get_logger().fatal(f'❌ {message}')
+            self.get_logger().fatal(f'💀 {message}')
 
     def _activate_gripper(self):
         '''
@@ -442,11 +447,11 @@ class RobotCommanderInterface(Node):
             future (Future): A future object
         '''
         if future.result().success:
-            self.get_logger().info('✔️ Gripper activated')
+            self.get_logger().info('✅ Gripper activated')
             self._activated_gripper = True
         else:
-            self.get_logger().fatal('❌ Gripper not activated')
-            
+            self.get_logger().fatal('💀 Gripper not activated')
+
     def _deactivate_gripper(self):
         '''
         Deactivate the gripper
@@ -469,11 +474,11 @@ class RobotCommanderInterface(Node):
             future (Future): A future object
         '''
         if future.result().success:
-            self.get_logger().info('✔️ Gripper deactivated')
+            self.get_logger().info('✅ Gripper deactivated')
             self._deactivated_gripper = True
         else:
-            self.get_logger().fatal('❌ Gripper not deactivated')
-            
+            self.get_logger().fatal('💀 Gripper not deactivated')
+
     def _move_robot_to_tray(self, tray_id, tray_pose):
         '''
         Move the floor robot to a tray to pick it up
@@ -488,7 +493,7 @@ class RobotCommanderInterface(Node):
         request.tray_pose_in_world = tray_pose
         future = self._move_robot_to_tray_cli.call_async(request)
         future.add_done_callback(self._move_robot_to_tray_done_cb)
-        
+
     def _move_robot_to_tray_done_cb(self, future):
         '''
         Client callback for the service /commander/move_robot_to_tray
@@ -498,15 +503,15 @@ class RobotCommanderInterface(Node):
         '''
         message = future.result().message
         if future.result().success:
-            self.get_logger().info(f'✔️ {message}')
+            self.get_logger().info(f'✅ {message}')
             self._moved_robot_to_tray = True
         else:
-            self.get_logger().fatal(f'❌ {message}')
+            self.get_logger().fatal(f'💀 {message}')
 
     # @brief Move the floor robot to its home position
     def _move_tray_to_agv(self, agv_number):
         self._moving_tray_to_agv = True
-        
+
         while not self._move_tray_to_agv_cli.wait_for_service(timeout_sec=1.0):
             self.get_logger().info('Service not available, waiting...')
 
@@ -524,7 +529,7 @@ class RobotCommanderInterface(Node):
         '''
         message = future.result().message
         if future.result().success:
-            self.get_logger().info(f'✔️ {message}')
+            self.get_logger().info(f'✅ {message}')
             self._moved_tray_to_agv = True
         else:
-            self.get_logger().fatal(f'❌ {message}')
+            self.get_logger().fatal(f'💀 {message}')
