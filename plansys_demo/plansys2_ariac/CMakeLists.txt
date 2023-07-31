@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(plansys2_ariac_terminal)
+project(plansys2_ariac)
 
 
 find_package(ament_cmake REQUIRED)
@@ -41,7 +41,7 @@ ament_target_dependencies(putdown_part_action_node ${dependencies})
 add_executable(putdown_tray_action_node src/putdown_tray_action_node.cpp)
 ament_target_dependencies(putdown_tray_action_node ${dependencies})
 
-# putdown_tray_action_node
+# start_competition_action_node
 add_executable(start_competition_action_node src/start_competition_action_node.cpp)
 ament_target_dependencies(start_competition_action_node ${dependencies})
 

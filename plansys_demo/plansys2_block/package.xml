@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>plansys2_ariac_bt</name>
+  <name>plansys2_block</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
+  <description>Use of PlanSys2 for the block world domain</description>
   <maintainer email="zeidk@umd.edu">zeid</maintainer>
   <license>TODO: License declaration</license>
 

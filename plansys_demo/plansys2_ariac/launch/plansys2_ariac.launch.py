@@ -11,7 +11,7 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
     # Get the launch directory
-    example_dir = get_package_share_directory('plansys2_ariac_terminal')
+    example_dir = get_package_share_directory('plansys2_ariac')
     namespace = LaunchConfiguration('namespace')
 
     declare_namespace_cmd = DeclareLaunchArgument(
@@ -31,7 +31,7 @@ def generate_launch_description():
 
     # Specify the actions
     pickup_part_cmd = Node(
-        package='plansys2_ariac_terminal',
+        package='plansys2_ariac',
         executable='pickup_part_action_node',
         name='pickup_part',
         namespace=namespace,
@@ -39,7 +39,7 @@ def generate_launch_description():
         parameters=[])
 
     pickup_tray_cmd = Node(
-        package='plansys2_ariac_terminal',
+        package='plansys2_ariac',
         executable='pickup_tray_action_node',
         name='pickup_tray',
         namespace=namespace,
@@ -47,7 +47,7 @@ def generate_launch_description():
         parameters=[])
     
     putdown_part_cmd = Node(
-        package='plansys2_ariac_terminal',
+        package='plansys2_ariac',
         executable='putdown_part_action_node',
         name='putdown_part',
         namespace=namespace,
@@ -55,7 +55,7 @@ def generate_launch_description():
         parameters=[])
 
     putdown_tray_cmd = Node(
-        package='plansys2_ariac_terminal',
+        package='plansys2_ariac',
         executable='putdown_tray_action_node',
         name='putdown_tray',
         namespace=namespace,
@@ -63,7 +63,7 @@ def generate_launch_description():
         parameters=[])
     
     change_to_part_gripper_cmd = Node(
-        package='plansys2_ariac_terminal',
+        package='plansys2_ariac',
         executable='change_to_part_gripper_action_node',
         name='change_to_part_gripper',
         namespace=namespace,
@@ -71,9 +71,17 @@ def generate_launch_description():
         parameters=[])   # Create the launch description and populate
     
     change_to_tray_gripper_cmd = Node(
-        package='plansys2_ariac_terminal',
+        package='plansys2_ariac',
         executable='change_to_tray_gripper_action_node',
         name='change_to_tray_gripper',
+        namespace=namespace,
+        output='screen',
+        parameters=[])   # Create the launch description and populate
+    
+    start_competition_cmd = Node(
+        package='plansys2_ariac',
+        executable='start_competition_action_node',
+        name='start_competition',
         namespace=namespace,
         output='screen',
         parameters=[])   # Create the launch description and populate
@@ -90,5 +98,6 @@ def generate_launch_description():
     launch_description.add_action(putdown_tray_cmd)
     launch_description.add_action(change_to_part_gripper_cmd)
     launch_description.add_action(change_to_tray_gripper_cmd)
+    launch_description.add_action(start_competition_cmd)
 
     return launch_description

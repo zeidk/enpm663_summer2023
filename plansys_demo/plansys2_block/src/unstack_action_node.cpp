@@ -22,11 +22,11 @@
 
 using namespace std::chrono_literals;
 
-class PutDownTrayAction : public plansys2::ActionExecutorClient
+class UnstackAction : public plansys2::ActionExecutorClient
 {
 public:
-    PutDownTrayAction()
-        : plansys2::ActionExecutorClient("start_competition", 250ms)
+    UnstackAction()
+        : plansys2::ActionExecutorClient("unstack", 50ms)
     {
         progress_ = 0.0;
     }
@@ -37,18 +37,18 @@ private:
         if (progress_ < 1.0)
         {
             progress_ += 0.02;
-            send_feedback(progress_, "Starting the competion");
+            send_feedback(progress_, "unstack action running");
         }
         else
         {
-            finish(true, 1.0, "Competition started");
+            finish(true, 1.0, "unstack action completed");
 
             progress_ = 0.0;
             std::cout << std::endl;
         }
 
         std::cout << "\r\e[K" << std::flush;
-        std::cout << "Putting down tray... [" << std::min(100.0, progress_ * 100.0) << "%]  " << std::flush;
+        std::cout << "unstack... [" << std::min(100.0, progress_ * 100.0) << "%]  " << std::flush;
     }
 
     float progress_;
@@ -57,9 +57,9 @@ private:
 int main(int argc, char **argv)
 {
     rclcpp::init(argc, argv);
-    auto node = std::make_shared<PutDownTrayAction>();
+    auto node = std::make_shared<UnstackAction>();
 
-    node->set_parameter(rclcpp::Parameter("action_name", "startcompetition"));
+    node->set_parameter(rclcpp::Parameter("action_name", "unstack"));
     node->trigger_transition(lifecycle_msgs::msg::Transition::TRANSITION_CONFIGURE);
 
     rclcpp::spin(node->get_node_base_interface());

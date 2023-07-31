@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>plansys2_ariac_terminal</name>
+  <name>plansys2_ariac</name>
   <version>0.0.0</version>
 
-  <description>A block world example of ROS2 Planning System</description>
+  <description>PlanSys2 example for ARIAC</description>
 
   <maintainer email="zeidk@umd.edu">Zeid Kootbally</maintainer>
 

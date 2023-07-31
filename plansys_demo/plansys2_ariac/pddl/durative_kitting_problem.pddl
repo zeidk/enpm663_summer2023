@@ -2,13 +2,22 @@
 (define (problem kitting)
     (:domain kitting)
     (:objects
+        ; number of parts can be retrieved from /ariac/bin_parts
         part1 part2 part3 - part
+        ; bins with parts. Can be retrieved from /ariac/bin_parts
         bin1 - bin
+        ; hard coded
         QUADRANT1 QUADRANT2 QUADRANT3 QUADRANT4 - quadrant
+        ; trays at stations. Can be retrieved from camera topics
         tray1 tray2 tray3 - tray
+        ; hard coded
         table1 table2 - table
+        ; part types and colors. Can be retrieved from /ariac/bin_parts
+        ; or from cameras
         BLUEBATTERY - part-type-color
+        ; can be retrieved from camera topics
         TRAYID1 TRAYID2 - tray-id
+        ; can be retrieved from /ariac/orders
         agv1 agv2 - agv
 
     )
@@ -34,6 +43,7 @@
         (on-table tray1 table1)
         (on-table tray2 table1)
         (on-table tray3 table2)
+        ; hard coded
         (part-gripper-mounted)
         (gripper-empty)
     )
@@ -42,7 +52,7 @@
             (on-agv tray1 agv1)
             (part-in-tray BLUEBATTERY TRAYID1 QUADRANT1)
             (part-in-tray BLUEBATTERY TRAYID1 QUADRANT2)
-            (submitted-order)
+            ; (submitted-order)
         )
     )
 )
