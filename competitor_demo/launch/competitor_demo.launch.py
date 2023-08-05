@@ -1,11 +1,10 @@
 
 from launch import LaunchDescription
-from launch_ros.actions import Node
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.actions import IncludeLaunchDescription
 from launch_ros.substitutions import FindPackageShare
 from launch.substitutions import PathJoinSubstitution, LaunchConfiguration
-from launch.conditions import IfCondition
+from launch_ros.actions import Node
 
 
 from launch.actions import (
@@ -13,23 +12,21 @@ from launch.actions import (
     OpaqueFunction,
 )
 
-from ariac_moveit_config.parameters import generate_parameters
-
 
 def launch_setup(context, *args, **kwargs):
     # Launch arguments
     trial_name = LaunchConfiguration("trial_name")
-    rviz = LaunchConfiguration("rviz")
+    use_rviz = LaunchConfiguration("use_rviz")
 
     # Moveit
-    moveit = IncludeLaunchDescription(
+    moveit_cmd = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             [FindPackageShare("ariac_moveit_config"), "/launch", "/ariac_robots_moveit.launch.py"]
         )
     )
 
     # ARIAC_environment
-    ariac_environment = IncludeLaunchDescription(
+    ariac_cmd = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             [FindPackageShare("ariac_gazebo"), "/launch", "/ariac.launch.py"]
         ),
@@ -39,22 +36,30 @@ def launch_setup(context, *args, **kwargs):
             'sensor_config': "sensors"
         }.items()
     )
-    
+
     # Test competitor
-    test_competitor = IncludeLaunchDescription(
+    test_competitor_cmd = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             [FindPackageShare("test_competitor"), "/launch", "/competitor.launch.py"]
         ),
         launch_arguments={
-            'rviz': rviz
+            'rviz': use_rviz
         }.items()
+    )
+    
+    # Listener
+    listener_cmd = Node(
+        package="competitor_demo",
+        executable="listener_demo_exe",
+        output="screen"
     )
 
 
     nodes_to_start = [
-        ariac_environment,
-        moveit,
-        test_competitor
+        ariac_cmd,
+        moveit_cmd,
+        test_competitor_cmd,
+        listener_cmd
     ]
 
     return nodes_to_start
@@ -66,9 +71,9 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument("trial_name", default_value="kitting", description="Name of ariac trial")
     )
-    
+
     declared_arguments.append(
-        DeclareLaunchArgument("rviz", default_value="false", description="start rviz node?")
+        DeclareLaunchArgument("use_rviz", default_value="false", description="start rviz node?")
     )
 
     return LaunchDescription(declared_arguments + [OpaqueFunction(function=launch_setup)])
