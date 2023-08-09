@@ -19,6 +19,9 @@ private:
     rclcpp::TimerBase::SharedPtr counter_timer_;
     rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher_;
     unsigned int count_;
+    // parameters
+    std::string qos_reliability_param_;
+    std::string qos_durability_param_;
 
     // methods
     void publisher_timer_cb_();
@@ -26,4 +29,5 @@ private:
     void initialize_();
     void print_qos(const rclcpp::QoS &qos);
     double rmw_time_to_seconds(const rmw_time_t &time);
+
 };

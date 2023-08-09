@@ -97,8 +97,48 @@ void QoSPublisher::initialize_()
     // publisher timer
     publish_timer_ = this->create_wall_timer(std::chrono::milliseconds((int)(2000.0)),
                                      std::bind(&QoSPublisher::publisher_timer_cb_, this));
+
+    // get the reliability and the durability from parameters
+    this->declare_parameter("reliability", "best_effort");
+    qos_reliability_param_ = this->get_parameter("reliability").as_string();
+    this->declare_parameter("durability", "volatile");
+    qos_durability_param_ = this->get_parameter("durability").as_string();
+
+    // QoS profile
+    rclcpp::QoS qos_profile(20);
+
+    // set the reliability
+    if (qos_reliability_param_ == "reliable")
+    {
+        qos_profile.reliable();
+    }
+    else if (qos_reliability_param_ == "best_effort")
+    {
+        qos_profile.best_effort();
+    }
+    else
+    {
+        RCLCPP_ERROR_STREAM(this->get_logger(), "Invalid reliability parameter: " << qos_reliability_param_);
+        rclcpp::shutdown();
+    }
+
+    // set the durability
+    if (qos_durability_param_ == "volatile")
+    {
+        qos_profile.durability_volatile();
+    }
+    else if (qos_durability_param_ == "transient")
+    {
+        qos_profile.transient_local();
+    }
+    else
+    {
+        RCLCPP_ERROR_STREAM(this->get_logger(), "Invalid durability parameter: " << qos_durability_param_);
+        rclcpp::shutdown();
+    }
+
     // publisher
-    rclcpp::QoS qos_profile = rclcpp::QoS(rclcpp::KeepAll()).best_effort();
+    // auto qos_profile = rclcpp::QoS(20).reliable().transient_local();
     publisher_ = this->create_publisher<std_msgs::msg::String>("leia", qos_profile);
     print_qos(publisher_->get_actual_qos());
 }
